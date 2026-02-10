@@ -1,26 +1,268 @@
-@import "tailwindcss";
+@import url('https://fonts.cdnfonts.com/css/penumbra-half-serif-std');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: 'Penumbra';
+  src: url('/fonts/penumbra.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: 'Plantin';
+  src: url('/fonts/plantin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light Theme Variables */
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Gold Colors */
+    --gold: #C8AA6E;
+    --gold-light: #F0E6D2;
+    --gold-dark: #785A28;
+
+    /* Background Colors - Tonos beige/crema en lugar de blanco */
+    --background: #E8E4DC;
+    --background-alt: #D4CFC4;
+
+    /* Surface Colors - Crema suave en lugar de blanco puro */
+    --surface: #F5F2EB;
+    --surface-elevated: rgba(245, 242, 235, 0.9);
+    --surface-hover: rgba(200, 170, 110, 0.08);
+
+    /* Border Colors */
+    --border: rgba(120, 90, 40, 0.12);
+    --border-strong: rgba(120, 90, 40, 0.2);
+
+    /* Text Colors */
+    --text-primary: #2A2520;
+    --text-secondary: #5A534D;
+    --text-tertiary: #8A837C;
+
+    /* Shadow Colors */
+    --shadow-sm: 0 1px 2px rgba(42, 37, 32, 0.04);
+    --shadow-md: 0 4px 8px rgba(42, 37, 32, 0.06);
+    --shadow-lg: 0 8px 16px rgba(42, 37, 32, 0.08);
+    --shadow-xl: 0 12px 24px rgba(42, 37, 32, 0.1);
+    --shadow-gold: 0 4px 12px rgba(200, 170, 110, 0.2);
+  }
+
+  /* Dark Theme Variables */
+  .dark {
+    /* Gold Colors */
+    --gold: #C8AA6E;
+    --gold-light: #F0E6D2;
+    --gold-dark: #785A28;
+
+    /* Background Colors */
+    --background: #0A0A0A;
+    --background-alt: #141414;
+
+    /* Surface Colors */
+    --surface: #1A1A1A;
+    --surface-elevated: rgba(26, 26, 26, 0.9);
+    --surface-hover: rgba(200, 170, 110, 0.06);
+
+    /* Border Colors */
+    --border: rgba(200, 170, 110, 0.08);
+    --border-strong: rgba(200, 170, 110, 0.15);
+
+    /* Text Colors */
+    --text-primary: #F0E6D2;
+    --text-secondary: #A09B8C;
+    --text-tertiary: #6A6A6A;
+
+    /* Shadow Colors */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.7);
+    --shadow-gold: 0 4px 12px rgba(200, 170, 110, 0.25);
+  }
+
+  /* Base Styles */
+  * {
+    @apply border-[var(--border)];
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--text-primary)] antialiased;
+    font-family: 'Plantin', 'Georgia', serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Títulos usan Penumbra */
+  h1, h2, h3, h4, h5, h6, li, a {
+    font-family: 'Penumbra', 'Georgia', serif;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-[var(--background)];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[var(--gold-dark)] rounded-full;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-[var(--gold)];
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Card Components */
+  .card-base {
+    @apply bg-[var(--surface)] rounded-2xl border border-[var(--border)] transition-all duration-300;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-hover {
+    @apply hover:shadow-[var(--shadow-gold)] hover:-translate-y-1;
+  }
+
+  .card-hover:hover {
+    border-color: var(--border-hover);
+  }
+
+  /* Button Components */
+  .btn-primary {
+    @apply px-8 py-3 bg-[var(--gold)] text-[var(--background)] rounded-full font-medium;
+    @apply hover:bg-[var(--gold-light)] hover:shadow-[var(--shadow-gold)];
+    @apply transition-all duration-300 hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 bg-[var(--surface)] text-[var(--gold)] rounded-full font-medium;
+    @apply border border-[var(--gold)] hover:border-[var(--gold-light)] hover:bg-[var(--surface-hover)];
+    @apply transition-all duration-300 hover:scale-105;
+  }
+
+  /* Text Utilities */
+  .text-gold {
+    @apply text-[var(--gold)];
+  }
+
+  .text-gold-light {
+    @apply text-[var(--gold-light)];
+  }
+
+  /* Glass Morphism */
+  .glass-morphism {
+    @apply backdrop-blur-xl border border-[var(--border)];
+    background: rgba(245, 242, 235, 0.85);
+  }
+
+  .dark .glass-morphism {
+    background: rgba(26, 26, 26, 0.9);
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      text-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+    }
+    50% {
+      text-shadow: 0 0 20px rgba(200, 170, 110, 0.5);
+    }
+  }
+
+  /* Animation Classes */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

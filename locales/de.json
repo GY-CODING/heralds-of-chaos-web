@@ -1,0 +1,105 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "notFound": "Nicht gefunden",
+    "appTitle": "Herolds des Chaos",
+    "company": "GYCODING"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "characters": "Charaktere",
+    "creatures": "Kreaturen",
+    "items": "Gegenstände",
+    "worlds": "Welten",
+    "places": "Orte"
+  },
+  "hero": {
+    "title": "Herolds des",
+    "chaos": "Chaos",
+    "description": "Begeben Sie sich auf eine epische Reise durch die nordische Mythologie. Entdecken Sie alte Legenden, mächtige Artefakte und die neun Reiche.",
+    "cta": "Charaktere Erkunden"
+  },
+  "sections": {
+    "exploreThe": "Erkunden Sie das",
+    "universe": "Universum",
+    "subtitle": "Tauchen Sie ein in die reiche Welt der nordischen Mythologie durch unsere kuratierten Sammlungen",
+    "characters": {
+      "title": "Charaktere",
+      "description": "Erkunden Sie die Götter, Helden und legendären Figuren der nordischen Mythologie"
+    },
+    "creatures": {
+      "title": "Kreaturen",
+      "description": "Entdecken Sie die mythischen Bestien und fantastischen Kreaturen"
+    },
+    "items": {
+      "title": "Gegenstände",
+      "description": "Untersuchen Sie die legendären Waffen und mächtigen Artefakte"
+    },
+    "worlds": {
+      "title": "Welten",
+      "description": "Reisen Sie durch die neun Reiche der nordischen Kosmologie"
+    },
+    "places": {
+      "title": "Orte",
+      "description": "Besuchen Sie die Hallen, Festungen und heiligen Stätten"
+    },
+    "explore": "Erkunden"
+  },
+  "pages": {
+    "characters": {
+      "title": "Charaktere",
+      "subtitle": "Erkunden Sie die Götter, Helden und legendären Figuren der nordischen Mythologie",
+      "empty": {
+        "title": "Keine Charaktere Gefunden",
+        "description": "Die Hallen sind leer. Schauen Sie bald wieder vorbei für legendäre Helden."
+      }
+    },
+    "creatures": {
+      "title": "Kreaturen",
+      "subtitle": "Entdecken Sie die mythischen Bestien und fantastischen Kreaturen der nordischen Mythologie",
+      "empty": {
+        "title": "Keine Kreaturen Gefunden",
+        "description": "Die Bestien müssen noch auftauchen. Schauen Sie bald wieder vorbei."
+      }
+    },
+    "items": {
+      "title": "Gegenstände",
+      "subtitle": "Untersuchen Sie die legendären Waffen und mächtigen Artefakte der nordischen Mythologie",
+      "empty": {
+        "title": "Keine Gegenstände Gefunden",
+        "description": "Die Waffenkammer ist leer. Schauen Sie bald wieder vorbei für legendäre Artefakte."
+      }
+    },
+    "worlds": {
+      "title": "Welten",
+      "subtitle": "Reisen Sie durch die neun Reiche der nordischen Kosmologie",
+      "empty": {
+        "title": "Keine Welten Gefunden",
+        "description": "Die Reiche sind verborgen. Schauen Sie bald wieder vorbei zum Erkunden."
+      }
+    },
+    "places": {
+      "title": "Orte",
+      "subtitle": "Besuchen Sie die Hallen, Festungen und heiligen Stätten der nordischen Mythologie",
+      "empty": {
+        "title": "Keine Orte Gefunden",
+        "description": "Die Orte müssen noch entdeckt werden. Schauen Sie bald wieder vorbei."
+      }
+    }
+  },
+  "detail": {
+    "backTo": "Zurück zu",
+    "race": "Rasse",
+    "affiliation": "Zugehörigkeit",
+    "type": "Typ",
+    "category": "Kategorie",
+    "realm": "Reich",
+    "location": "Standort",
+    "relatedCharacters": "Verwandte Charaktere",
+    "relatedCreatures": "Verwandte Kreaturen",
+    "relatedItems": "Verwandte Gegenstände",
+    "relatedWorlds": "Verwandte Welten",
+    "relatedPlaces": "Verwandte Orte"
+  }
+}

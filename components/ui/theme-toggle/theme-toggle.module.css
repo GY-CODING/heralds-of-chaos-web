@@ -1,0 +1,28 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+.button:hover {
+  background-color: var(--surface-elevated);
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.language {
+  font-size: 0.875rem;
+  font-weight: 600;
+}

@@ -1,65 +1,228 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ROUTES } from "@/constants/routes.constants";
+import { useTranslations } from "@/hooks/use-translations";
+import { Crown, Dog, Hammer, TreePine, Landmark } from "lucide-react";
+
+export default function HomePage() {
+  const t = useTranslations();
+
+  const sections = [
+    {
+      title: t.sections.characters.title,
+      description: t.sections.characters.description,
+      href: ROUTES.CHARACTERS,
+      icon: Crown,
+    },
+    {
+      title: t.sections.creatures.title,
+      description: t.sections.creatures.description,
+      href: ROUTES.CREATURES,
+      icon: Dog,
+    },
+    {
+      title: t.sections.items.title,
+      description: t.sections.items.description,
+      href: ROUTES.ITEMS,
+      icon: Hammer,
+    },
+    {
+      title: t.sections.worlds.title,
+      description: t.sections.worlds.description,
+      href: ROUTES.WORLDS,
+      icon: TreePine,
+    },
+    {
+      title: t.sections.places.title,
+      description: t.sections.places.description,
+      href: ROUTES.PLACES,
+      icon: Landmark,
+    },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen">
+      {/* Hero Section - Clean & Epic */}
+      <section className="relative py-24 md:py-32 px-6 overflow-hidden">
+        {/* Subtle background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] opacity-50" />
+
+        <div className="max-w-[1400px] mx-auto text-center relative z-10">
+          {/* Main Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-[var(--text-primary)]">
+              {t.hero.title}{" "}
+              <span className="text-[var(--gold)] relative inline-block">
+                {t.hero.chaos}
+                {/* Subtle glow effect */}
+                <motion.span
+                  className="absolute inset-0 blur-xl opacity-30"
+                  animate={{
+                    opacity: [0.2, 0.4, 0.2],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  aria-hidden="true"
+                >
+                  {t.hero.chaos}
+                </motion.span>
+              </span>
+            </h1>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            className="text-lg md:text-xl text-[var(--text-secondary)] max-w-[700px] mx-auto mb-12 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Documentation
-          </a>
+            {t.hero.description}
+          </motion.p>
+
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <Link
+              href={ROUTES.CHARACTERS}
+              className="btn-primary inline-flex items-center gap-2 group"
+            >
+              <span>{t.hero.cta}</span>
+              <motion.span
+                className="inline-block"
+                animate={{ x: [0, 4, 0] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                →
+              </motion.span>
+            </Link>
+          </motion.div>
+
+          {/* Decorative separator */}
+          <motion.div
+            className="flex justify-center mt-20"
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-[var(--gold)]/40 to-transparent" />
+          </motion.div>
         </div>
-      </main>
+      </section>
+
+      {/* Sections Grid - Clean Cards */}
+      <section className="py-16 md:py-24 px-6">
+        <div className="max-w-[1400px] mx-auto">
+          {/* Section Title */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[var(--text-primary)]">
+              {t.sections.exploreThe}{" "}
+              <span className="text-[var(--gold)]">{t.sections.universe}</span>
+            </h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-[600px] mx-auto">
+              {t.sections.subtitle}
+            </p>
+          </motion.div>
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {sections.map((section, index) => {
+              const Icon = section.icon;
+              return (
+                <motion.div
+                  key={section.href}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: "easeOut",
+                  }}
+                >
+                  <Link
+                    href={section.href}
+                    className="card-base card-hover block p-8 text-center group h-full"
+                  >
+                    {/* Icon */}
+                    <motion.div
+                      className="flex justify-center mb-6"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="p-4 rounded-2xl bg-[var(--gold)]/10 border border-[var(--gold)]/20 group-hover:bg-[var(--gold)]/15 group-hover:border-[var(--gold)]/30 transition-all duration-300">
+                        <Icon
+                          className="w-10 h-10 text-[var(--gold)]"
+                          strokeWidth={1.5}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* Title */}
+                    <h3 className="text-2xl font-bold mb-3 text-[var(--gold)] group-hover:drop-shadow-[0_0_15px_rgba(200,170,110,0.4)] transition-all duration-300">
+                      {section.title}
+                    </h3>
+
+                    {/* Divider */}
+                    <motion.div className="h-px w-0 bg-gradient-to-r from-transparent via-[var(--gold)]/50 to-transparent mx-auto mb-4 group-hover:w-20 transition-all duration-500" />
+
+                    {/* Description */}
+                    <p className="text-[var(--text-secondary)] leading-relaxed">
+                      {section.description}
+                    </p>
+
+                    {/* Arrow indicator */}
+                    <motion.div
+                      className="mt-6 text-[var(--gold)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      initial={{ x: -5 }}
+                      whileHover={{ x: 0 }}
+                    >
+                      <span className="inline-block text-sm font-medium">
+                        {t.sections.explore} →
+                      </span>
+                    </motion.div>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer separator */}
+      <section className="py-16">
+        <div className="max-w-[1400px] mx-auto px-6">
+          <motion.div
+            className="h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent"
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          />
+        </div>
+      </section>
     </div>
   );
 }

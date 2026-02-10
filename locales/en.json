@@ -1,0 +1,111 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "notFound": "Not found",
+    "appTitle": "Heralds of Chaos",
+    "company": "GYCODING"
+  },
+  "navigation": {
+    "home": "Home",
+    "characters": "Characters",
+    "creatures": "Creatures",
+    "items": "Items",
+    "worlds": "Worlds",
+    "places": "Places"
+  },
+  "hero": {
+    "title": "Heralds of",
+    "chaos": "Chaos",
+    "description": "Embark on an epic journey through Norse mythology. Discover ancient legends, powerful artifacts, and the nine realms.",
+    "cta": "Explore Characters"
+  },
+  "sections": {
+    "exploreThe": "Explore the",
+    "universe": "Universe",
+    "subtitle": "Dive into the rich tapestry of Norse mythology through our curated collections",
+    "characters": {
+      "title": "Characters",
+      "description": "Explore the gods, heroes, and legendary figures of Norse mythology"
+    },
+    "creatures": {
+      "title": "Creatures",
+      "description": "Discover the mythical beasts and fantastic creatures"
+    },
+    "items": {
+      "title": "Items",
+      "description": "Examine the legendary weapons and artifacts of power"
+    },
+    "worlds": {
+      "title": "Worlds",
+      "description": "Journey through the nine realms of Norse cosmology"
+    },
+    "places": {
+      "title": "Places",
+      "description": "Visit the halls, fortresses, and sacred sites"
+    },
+    "explore": "Explore"
+  },
+  "pages": {
+    "characters": {
+      "title": "Characters",
+      "subtitle": "Explore the gods, heroes, and legendary figures of Norse mythology",
+      "empty": {
+        "title": "No Characters Found",
+        "description": "The halls are empty. Check back soon for legendary heroes."
+      }
+    },
+    "creatures": {
+      "title": "Creatures",
+      "subtitle": "Discover the mythical beasts and fantastic creatures of Norse mythology",
+      "empty": {
+        "title": "No Creatures Found",
+        "description": "The beasts have yet to emerge. Check back soon."
+      }
+    },
+    "items": {
+      "title": "Items",
+      "subtitle": "Examine the legendary weapons and artifacts of power from Norse mythology",
+      "empty": {
+        "title": "No Items Found",
+        "description": "The armory is empty. Check back soon for legendary artifacts."
+      }
+    },
+    "worlds": {
+      "title": "Worlds",
+      "subtitle": "Journey through the nine realms of Norse cosmology",
+      "empty": {
+        "title": "No Worlds Found",
+        "description": "The realms are hidden. Check back soon to explore."
+      }
+    },
+    "places": {
+      "title": "Places",
+      "subtitle": "Visit the halls, fortresses, and sacred sites of Norse mythology",
+      "empty": {
+        "title": "No Places Found",
+        "description": "The locations are yet to be discovered. Check back soon."
+      }
+    }
+  },
+  "detail": {
+    "backTo": "Back to",
+    "description": "Description",
+    "title": "Title",
+    "race": "Race",
+    "affiliation": "Affiliation",
+    "type": "Type",
+    "category": "Category",
+    "realm": "Realm",
+    "location": "Location",
+    "mainColor": "Main Color",
+    "alternativeNames": "Alternative Names",
+    "spanishName": "Spanish Name",
+    "englishName": "English Name",
+    "relatedCharacters": "Related Characters",
+    "relatedCreatures": "Related Creatures",
+    "relatedItems": "Related Items",
+    "relatedWorlds": "Related Worlds",
+    "relatedPlaces": "Related Places"
+  }
+}

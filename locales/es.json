@@ -1,0 +1,111 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "notFound": "No encontrado",
+    "appTitle": "Heraldos del Caos",
+    "company": "GYCODING"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "characters": "Personajes",
+    "creatures": "Criaturas",
+    "items": "Objetos",
+    "worlds": "Mundos",
+    "places": "Lugares"
+  },
+  "hero": {
+    "title": "Heraldos del",
+    "chaos": "Caos",
+    "description": "Embárcate en un viaje épico a través de la mitología nórdica. Descubre leyendas antiguas, poderosos artefactos y los nueve reinos.",
+    "cta": "Explorar Personajes"
+  },
+  "sections": {
+    "exploreThe": "Explora el",
+    "universe": "Universo",
+    "subtitle": "Sumérgete en el rico tapiz de la mitología nórdica a través de nuestras colecciones",
+    "characters": {
+      "title": "Personajes",
+      "description": "Explora los dioses, héroes y figuras legendarias de la mitología nórdica"
+    },
+    "creatures": {
+      "title": "Criaturas",
+      "description": "Descubre las bestias míticas y criaturas fantásticas"
+    },
+    "items": {
+      "title": "Objetos",
+      "description": "Examina las armas legendarias y artefactos de poder"
+    },
+    "worlds": {
+      "title": "Mundos",
+      "description": "Viaja a través de los nueve reinos de la cosmología nórdica"
+    },
+    "places": {
+      "title": "Lugares",
+      "description": "Visita los salones, fortalezas y lugares sagrados"
+    },
+    "explore": "Explorar"
+  },
+  "pages": {
+    "characters": {
+      "title": "Personajes",
+      "subtitle": "Explora los dioses, héroes y figuras legendarias de la mitología nórdica",
+      "empty": {
+        "title": "No se encontraron personajes",
+        "description": "Los salones están vacíos. Vuelve pronto para conocer héroes legendarios."
+      }
+    },
+    "creatures": {
+      "title": "Criaturas",
+      "subtitle": "Descubre las bestias míticas y criaturas fantásticas de la mitología nórdica",
+      "empty": {
+        "title": "No se encontraron criaturas",
+        "description": "Las bestias aún no han emergido. Vuelve pronto."
+      }
+    },
+    "items": {
+      "title": "Objetos",
+      "subtitle": "Examina las armas legendarias y artefactos de poder de la mitología nórdica",
+      "empty": {
+        "title": "No se encontraron objetos",
+        "description": "La armería está vacía. Vuelve pronto para ver artefactos legendarios."
+      }
+    },
+    "worlds": {
+      "title": "Mundos",
+      "subtitle": "Viaja a través de los nueve reinos de la cosmología nórdica",
+      "empty": {
+        "title": "No se encontraron mundos",
+        "description": "Los reinos están ocultos. Vuelve pronto para explorar."
+      }
+    },
+    "places": {
+      "title": "Lugares",
+      "subtitle": "Visita los salones, fortalezas y lugares sagrados de la mitología nórdica",
+      "empty": {
+        "title": "No se encontraron lugares",
+        "description": "Las ubicaciones aún no se han descubierto. Vuelve pronto."
+      }
+    }
+  },
+  "detail": {
+    "backTo": "Volver a",
+    "description": "Descripción",
+    "title": "Título",
+    "race": "Raza",
+    "affiliation": "Afiliación",
+    "type": "Tipo",
+    "category": "Categoría",
+    "realm": "Reino",
+    "location": "Ubicación",
+    "mainColor": "Color Principal",
+    "alternativeNames": "Nombres Alternativos",
+    "spanishName": "Nombre en Español",
+    "englishName": "Nombre en Inglés",
+    "relatedCharacters": "Personajes Relacionados",
+    "relatedCreatures": "Criaturas Relacionadas",
+    "relatedItems": "Objetos Relacionados",
+    "relatedWorlds": "Mundos Relacionados",
+    "relatedPlaces": "Lugares Relacionados"
+  }
+}
