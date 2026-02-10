@@ -4,7 +4,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useTranslations } from "@/hooks/use-translations";
 import type { World } from "@/types/world.types";
 import { motion } from "framer-motion";
-import { MapPin, Sparkles } from "lucide-react";
+import { MapPin, TreePine } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,31 +25,30 @@ export function WorldsPageContent({ worlds }: WorldsPageContentProps) {
       </div>
 
       <div className="max-w-[1600px] mx-auto relative z-10">
-        {/* Header simple y elegante */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 mb-6">
-            <Sparkles className="w-5 h-5 text-[var(--gold)]" />
-            <span className="text-sm uppercase tracking-[0.3em] text-[var(--gold)] font-semibold">
-              {language === "en" ? "Nine Realms" : "Nueve Reinos"}
-            </span>
-            <Sparkles className="w-5 h-5 text-[var(--gold)]" />
+        {/* Header épico */}
+        <div className="text-center mb-20">
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-1 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
           </div>
-
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-[#A07F4C] via-[#C8AA6E] to-[#785A28] bg-clip-text text-transparent">
               {t.pages.worlds.title}
             </span>
           </h1>
-
-          <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-[600px] mx-auto font-light">
+          <p className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-[800px] mx-auto leading-relaxed font-light">
             {t.pages.worlds.subtitle}
           </p>
-        </motion.div>
+          <div className="flex justify-center mt-8">
+            <div className="relative w-48 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] px-4">
+                <TreePine
+                  className="w-6 h-6 text-[var(--gold)]"
+                  strokeWidth={2}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Grid de mundos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">

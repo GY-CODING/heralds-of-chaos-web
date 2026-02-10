@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Heralds of Chaos | Norse Mythology Encyclopedia",
+  title: "Heralds of Chaos",
   description:
     "Explore the rich world of Norse mythology: characters, creatures, items, worlds, and places from the ancient Nordic legends.",
   keywords: [
