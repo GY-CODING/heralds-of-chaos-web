@@ -3,7 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import {
   ThemeToggle,
   LanguageToggle,
@@ -20,6 +22,7 @@ export function Header() {
   const pathname = usePathname();
   const translate = useTranslate();
   const t = useTranslations();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
     { href: ROUTES.CHARACTERS, labelKey: "characters" as const },
@@ -38,11 +41,11 @@ export function Header() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-4 flex items-center justify-between gap-6">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between gap-6">
         {/* Logo minimalista */}
         <Link href={ROUTES.HOME} className="flex items-center gap-3 group">
           <motion.div
-            className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden"
             whileHover={{ scale: 1.05, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
@@ -56,10 +59,10 @@ export function Header() {
             />
           </motion.div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors duration-300">
+            <span className="text-[13px] sm:text-lg font-bold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors duration-300">
               {t.common.appTitle}
             </span>
-            <span className="text-xs text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">
+            <span className="text-[12px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">
               {t.common.company}
             </span>
           </div>
@@ -133,43 +136,55 @@ export function Header() {
         >
           <LanguageToggle />
           <ThemeToggle />
+
+          {/* Botón hamburguesa móvil */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6 text-[var(--text-primary)]" />
+            ) : (
+              <Menu className="w-6 h-6 text-[var(--text-primary)]" />
+            )}
+          </button>
         </motion.div>
       </div>
 
-      {/* Navegación móvil - Horizontal scroll */}
-      <nav className="lg:hidden px-6 pb-3 border-t border-[var(--border)]">
-        <motion.div
-          className="flex items-center gap-2 overflow-x-auto pt-3 scrollbar-hide"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          {navItems.map((item, index) => {
-            const title = SECTION_TITLES[item.labelKey];
-            const active = isActive(item.href);
-            return (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link
-                  href={item.href}
-                  className={`relative flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    active
-                      ? "text-[var(--gold)] bg-[var(--gold)]/10 border border-[var(--gold)]/20"
-                      : "text-[var(--text-secondary)] bg-[var(--surface)] border border-[var(--border)] hover:text-[var(--gold)] hover:border-[var(--gold)]/20"
-                  }`}
-                >
-                  {translate(title)}
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </nav>
+      {/* Navegación móvil - Dropdown vertical */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.nav
+            className="lg:hidden border-t border-[var(--border)] bg-[var(--surface)]"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="px-4 py-3 space-y-1">
+              {navItems.map((item) => {
+                const title = SECTION_TITLES[item.labelKey];
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 ${
+                      active
+                        ? "text-[var(--gold)] bg-[var(--gold)]/10 border border-[var(--gold)]/20"
+                        : "text-[var(--text-secondary)] hover:text-[var(--gold)] hover:bg-[var(--surface-hover)]"
+                    }`}
+                  >
+                    {translate(title)}
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

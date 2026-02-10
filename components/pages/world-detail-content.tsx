@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { TreePine, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { useTranslations } from "@/hooks/use-translations";
 import { ROUTES } from "@/constants/routes.constants";
@@ -92,8 +92,14 @@ export function WorldDetailContent({ world }: WorldDetailContentProps) {
           {/* Header */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 rounded-xl">
-                <TreePine className="w-8 h-8 text-[var(--gold)]" />
+              <div className="w-20 h-20 bg-[var(--gold)]/10 flex items-center justify-center overflow-hidden">
+                <Image
+                  src={world.detailedIcon}
+                  alt={`${currentName} rune`}
+                  width={64}
+                  height={64}
+                  className="object-cover "
+                />
               </div>
               <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)]">
                 {currentName}

@@ -28,25 +28,28 @@ export function CharactersPageContent({
   } = useFilters(characters, CHARACTER_FILTERS);
 
   return (
-    <div className="min-h-screen py-16 px-6">
+    <div className="min-h-screen py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1600px] mx-auto">
         {/* Header épico */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 sm:mb-16 md:mb-20">
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-1 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
+            <div className="w-12 sm:w-16 md:w-20 h-1 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-[#A07F4C] via-[#C8AA6E] to-[#785A28] bg-clip-text text-transparent">
               {t.pages.characters.title}
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-[800px] mx-auto leading-relaxed font-light">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-secondary)] max-w-[800px] mx-auto leading-relaxed font-light">
             {t.pages.characters.subtitle}
           </p>
           <div className="flex justify-center mt-8">
             <div className="relative w-48 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] px-4">
-                <Crown className="w-6 h-6 text-[var(--gold)]" strokeWidth={2} />
+                <Crown
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--gold)]"
+                  strokeWidth={2}
+                />
               </div>
             </div>
           </div>
@@ -64,16 +67,16 @@ export function CharactersPageContent({
 
         {/* Grid de personajes */}
         {filteredData.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6 lg:gap-8">
             {filteredData.map((character) => (
               <CharacterCard key={character.identifier} character={character} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-32">
+          <div className="text-center py-20 sm:py-32">
             <div className="mb-6 flex justify-center">
               <Crown
-                className="w-16 h-16 text-[var(--gold)]"
+                className="w-12 h-12 sm:w-16 sm:h-16 text-[var(--gold)]"
                 strokeWidth={1.5}
               />
             </div>

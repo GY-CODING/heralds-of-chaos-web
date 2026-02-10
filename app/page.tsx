@@ -45,7 +45,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Clean & Epic */}
-      <section className="relative py-24 md:py-32 px-6 overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 px-6 overflow-hidden">
         {/* Subtle background decoration */}
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)] via-[var(--background-alt)] to-[var(--background)] opacity-50" />
 
@@ -56,7 +56,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-[var(--text-primary)]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 text-[var(--text-primary)]">
               {t.hero.title}{" "}
               <span className="text-[var(--gold)] relative inline-block">
                 {t.hero.chaos}
@@ -81,7 +81,7 @@ export default function HomePage() {
 
           {/* Description */}
           <motion.p
-            className="text-lg md:text-xl text-[var(--text-secondary)] max-w-[700px] mx-auto mb-12 leading-relaxed"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-secondary)] max-w-[700px] mx-auto mb-12 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -97,11 +97,11 @@ export default function HomePage() {
           >
             <Link
               href={ROUTES.CHARACTERS}
-              className="btn-primary inline-flex items-center gap-2 group"
+              className="btn-primary inline-flex items-center gap-2 group px-6 sm:px-8 py-3 sm:py-4"
             >
               <span>{t.hero.cta}</span>
               <motion.span
-                className="inline-block"
+                className="inline-block w-4 h-4 sm:w-5 sm:h-5"
                 animate={{ x: [0, 4, 0] }}
                 transition={{
                   duration: 1.5,
@@ -137,17 +137,17 @@ export default function HomePage() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[var(--text-primary)]">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-[var(--text-primary)]">
               {t.sections.exploreThe}{" "}
               <span className="text-[var(--gold)]">{t.sections.universe}</span>
             </h2>
-            <p className="text-[var(--text-secondary)] text-lg max-w-[600px] mx-auto">
+            <p className="text-[var(--text-secondary)] text-base sm:text-lg md:text-xl max-w-[600px] mx-auto">
               {t.sections.subtitle}
             </p>
           </motion.div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {sections.map((section, index) => {
               const Icon = section.icon;
               return (
@@ -164,7 +164,7 @@ export default function HomePage() {
                 >
                   <Link
                     href={section.href}
-                    className="card-base card-hover block p-8 text-center group h-full"
+                    className="card-base card-hover block p-6 sm:p-8 text-center group h-full"
                   >
                     {/* Icon */}
                     <motion.div
@@ -172,16 +172,16 @@ export default function HomePage() {
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="p-4 rounded-2xl bg-[var(--gold)]/10 border border-[var(--gold)]/20 group-hover:bg-[var(--gold)]/15 group-hover:border-[var(--gold)]/30 transition-all duration-300">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[var(--gold)]/10 border border-[var(--gold)]/20 group-hover:bg-[var(--gold)]/15 group-hover:border-[var(--gold)]/30 transition-all duration-300 flex items-center justify-center">
                         <Icon
-                          className="w-10 h-10 text-[var(--gold)]"
+                          className="w-7 h-7 sm:w-8 sm:h-8 text-[var(--gold)]"
                           strokeWidth={1.5}
                         />
                       </div>
                     </motion.div>
 
                     {/* Title */}
-                    <h3 className="text-2xl font-bold mb-3 text-[var(--gold)] group-hover:drop-shadow-[0_0_15px_rgba(200,170,110,0.4)] transition-all duration-300">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 text-[var(--gold)] group-hover:drop-shadow-[0_0_15px_rgba(200,170,110,0.4)] transition-all duration-300">
                       {section.title}
                     </h3>
 
