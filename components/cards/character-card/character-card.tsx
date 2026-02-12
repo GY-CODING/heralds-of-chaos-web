@@ -30,7 +30,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
         className="group block relative overflow-hidden rounded-xl sm:rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all duration-500 hover:border-[var(--gold)] hover:shadow-[var(--shadow-gold)]"
       >
         {/* Imagen con overlay gradiente */}
-        <div className="relative w-full aspect-square sm:aspect-[3/4] overflow-hidden bg-[var(--background-alt)]">
+        <div className="relative w-full aspect-[2/3] overflow-hidden bg-[var(--background-alt)]">
           <Image
             src={character.image}
             alt={character.name[language] || character.name.en || "Character"}
