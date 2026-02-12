@@ -22,6 +22,37 @@ export const metadata: Metadata = {
     "Thor",
     "mythology encyclopedia",
   ],
+  authors: [{ name: "GYCODING" }],
+  openGraph: {
+    title: "Heralds of Chaos",
+    description:
+      "Explore the rich world of Norse mythology: characters, creatures, items, worlds, and places from the ancient Nordic legends.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Heralds of Chaos",
+    images: [
+      {
+        url: "/images/hoc.png",
+        width: 1200,
+        height: 630,
+        alt: "Heralds of Chaos Logo",
+      },
+    ],
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/images/hoc.png",
+    apple: "/images/hoc.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -31,6 +62,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/images/hoc.png" />
+        <meta name="theme-color" content="#0a0a0a" />
+      </head>
       <body
         className={`${inter.variable} antialiased`}
         suppressHydrationWarning
