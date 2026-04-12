@@ -8,6 +8,9 @@
     "start": "next start --port 3003",
     "lint": "eslint"
   },
+ "engines": {
+    "node": ">=20.9.0"
+  },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.11",
     "framer-motion": "^12.31.0",
