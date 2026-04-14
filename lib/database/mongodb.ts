@@ -4,12 +4,8 @@ import { MongoClient, Db, MongoClientOptions } from "mongodb";
  * Valida que las variables de entorno necesarias estén configuradas
  */
 function validateEnvironment(): void {
-  if (!process.env.MONGODB_URI) {
-    throw new Error("MONGODB_URI environment variable is not defined");
-  }
-
-  if (!process.env.MONGODB_DB) {
-    throw new Error("MONGODB_DB environment variable is not defined");
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI environment variable is not defined");
   }
 }
 
@@ -60,8 +56,8 @@ export async function connectToDatabase(): Promise<{
   }
 
   if (!cached.promise) {
-    const uri = process.env.MONGODB_URI!;
-    const dbName = process.env.MONGODB_DB!;
+    const uri = process.env.MONGO_URI!;
+    const dbName = "HeraldsOfChaos";
 
     cached.promise = MongoClient.connect(uri, MONGODB_CONFIG).then((client) => {
       const db = client.db(dbName);
