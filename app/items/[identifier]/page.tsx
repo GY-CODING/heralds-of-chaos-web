@@ -35,5 +35,9 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
     notFound();
   }
 
-  return <ItemDetailContent item={item} />;
+  const others = (await itemService.getIllustrated(7))
+    .filter((i) => i.identifier !== item.identifier)
+    .slice(0, 6);
+
+  return <ItemDetailContent item={item} others={others} />;
 }

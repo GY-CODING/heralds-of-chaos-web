@@ -1,93 +1,125 @@
 "use client";
 
+/**
+ * Ficha del códice: una lámina, no una tarjeta.
+ *
+ * El nombre y el título van **dentro** del arte, sobre un velo, como la portada de un libro de
+ * personaje; debajo queda una tira grabada con la raza y la runa del reino al que pertenece.
+ *
+ * Solo 56 de los 344 personajes tienen ilustración. Los otros 288 no se quedan con un marcador
+ * gris: son **entradas selladas**, con la runa de su reino detrás y la inicial en pan de oro.
+ *
+ * Sin framer-motion a propósito: son hasta 344 láminas y montar una animación por ficha se nota.
+ * El movimiento al pasar por encima va en CSS (transform y opacity).
+ */
+
 import { ROUTES } from "@/constants/routes.constants";
 import { useLanguage } from "@/hooks/use-language";
+import { realmInk, rgbOf, SealedPlate } from "@/components/ui/scene/scene";
 import type { Character, CharacterWithWorld } from "@/types/character.types";
-import { motion } from "framer-motion";
+import type { MultiLanguageText } from "@/types/common.types";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 interface CharacterCardProps {
   character: Character | CharacterWithWorld;
 }
 
-/**
- * Card épica minimalista inspirada en League of Legends Universe
- */
+/** Algún registro trae `race` como string suelto en vez de texto multiidioma. */
+function text(value: MultiLanguageText | string | undefined, language: "en" | "es"): string {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  return value[language] || value.en || "";
+}
+
 export function CharacterCard({ character }: CharacterCardProps) {
-  const language = useLanguage((state) => state.language);
-  const isPlaceholderImage = character.image.includes("none.webp");
+  const { language } = useLanguage();
+  // Hay URLs de arte que ya no existen (404). Si falla, la ficha cae al sello en vez de
+  // quedarse con el icono de imagen rota.
+  const [artFailed, setArtFailed] = useState(false);
+
+  const name = text(character.name, language);
+  const title = text(character.title, language);
+  const race = text(character.race, language);
+
+  const sealed = !character.image || character.image.includes("none.webp") || artFailed;
+  const world =
+    typeof character.world === "object" && character.world !== null && "mainColor" in character.world
+      ? (character.world as CharacterWithWorld["world"])
+      : null;
+  const tint =
+    world?.mainColor && /^#[0-9a-f]{6}$/i.test(world.mainColor) ? world.mainColor : "#C8AA6E";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      whileHover={{ y: -4 }}
+    <Link
+      href={ROUTES.CHARACTER_DETAIL(character.identifier)}
+      className="group relative block overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] transition-[transform,border-color,box-shadow] duration-300 ease-pop hover:-translate-y-1.5 hover:border-[var(--gold)] focus-visible:border-[var(--gold)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      style={{ ["--tint" as string]: tint }}
     >
-      <Link
-        href={ROUTES.CHARACTER_DETAIL(character.identifier)}
-        className="group block relative overflow-hidden rounded-xl sm:rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all duration-500 hover:border-[var(--gold)] hover:shadow-[var(--shadow-gold)]"
-      >
-        {/* Imagen con overlay gradiente */}
-        <div className="relative w-full aspect-[2/3] overflow-hidden bg-[var(--background-alt)]">
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#0B0B10]">
+        {sealed ? (
+          <SealedPlate initial={name.charAt(0)} tint={tint} rune={world?.detailedIcon} />
+        ) : (
           <Image
             src={character.image}
-            alt={character.name[language] || character.name.en || "Character"}
+            alt=""
             fill
-            className={`object-cover transition-all duration-700 group-hover:scale-105 ${
-              isPlaceholderImage ? "invert dark:invert-0" : ""
-            }`}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            onError={() => setArtFailed(true)}
           />
+        )}
 
-          {/* Gradiente overlay sutil */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent opacity-90" />
+        {/* El velo: el nombre se lee siempre, tenga el arte el fondo que tenga. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-[62%]"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(6,6,10,0.95) 0%, rgba(6,6,10,0.72) 38%, rgba(6,6,10,0) 100%)",
+          }}
+        />
 
-          {/* Brillo dorado en hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/0 via-[var(--gold)]/5 to-[var(--gold)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
+        {/* El sello del reino, arriba a la izquierda. */}
+        {world?.detailedIcon && (
+          <Image
+            src={world.detailedIcon}
+            alt=""
+            width={26}
+            height={26}
+            aria-hidden
+            className="absolute left-2.5 top-2.5 h-6 w-6 object-contain opacity-45 transition-opacity duration-500 group-hover:opacity-100"
+            loading="lazy"
+          />
+        )}
 
-        {/* Contenido */}
-        <div className="p-2 sm:p-4 space-y-1 sm:space-y-2">
-          {/* Nombre */}
-          <h3 className="text-sm sm:text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors duration-300 line-clamp-1">
-            {character.name[language]}
+        <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
+          <h3 className="line-clamp-2 text-[15px] leading-[1.1] text-[#F0E6D2] sm:text-lg">
+            {name}
           </h3>
-
-          {/* Título */}
-          <p className="text-[10px] sm:text-sm font-medium text-[var(--gold)] uppercase tracking-wide line-clamp-1">
-            {character.title[language]}
-          </p>
-
-          {/* Raza */}
-          <p className="text-[10px] sm:text-sm text-[var(--text-secondary)] line-clamp-1 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-            {character.race[language]}
-          </p>
-
-          {/* Línea decorativa */}
-          <div className="pt-3">
-            <div className="h-px w-0 group-hover:w-full bg-gradient-to-r from-[var(--gold)] to-transparent transition-all duration-500" />
-          </div>
+          {title && (
+            <p
+              className="mt-1.5 line-clamp-1 text-[12px] leading-tight sm:text-[13px]"
+              style={{ color: realmInk(tint) }}
+            >
+              {title}
+            </p>
+          )}
         </div>
 
-        {/* Indicador de hover */}
-        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
-          <svg
-            className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--gold)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </div>
-      </Link>
-    </motion.div>
+        {/* Filo del reino abajo: se enciende al pasar por encima. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-px opacity-40 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: `linear-gradient(to right, transparent, rgba(${rgbOf(tint)},0.9), transparent)` }}
+        />
+      </div>
+
+      {/* La tira grabada: a qué raza pertenece. */}
+      <p className="truncate px-3 py-2.5 text-[12px] text-[var(--text-tertiary)] sm:text-[13px]">
+        {race || "—"}
+      </p>
+    </Link>
   );
 }

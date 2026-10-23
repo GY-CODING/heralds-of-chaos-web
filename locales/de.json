@@ -18,7 +18,42 @@
     "title": "Herolds des",
     "chaos": "Chaos",
     "description": "Begeben Sie sich auf eine epische Reise durch die nordische Mythologie. Entdecken Sie alte Legenden, mächtige Artefakte und die neun Reiche.",
-    "cta": "Charaktere Erkunden"
+    "cta": "Charaktere Erkunden",
+    "heralds": "Herolds",
+    "joiner": "des",
+    "lead": "Begib dich auf eine Reise durch die nordische Mythologie.",
+    "runeHint": "Wähle eine Rune, um ihr Reich zu betreten.",
+    "enter": "Den Kodex betreten",
+    "secondary": "Die neun Reiche"
+  },
+  "home": {
+    "scroll": "Scrollen",
+    "realmsEyebrow": "Yggdrasil",
+    "codexEyebrow": "Die Sammlungen",
+    "entries": "Einträge",
+    "entry": "Eintrag",
+    "closingTitle": "Jeder Name, jede Bestie und jede Halle, katalogisiert.",
+    "realmsTitle": "Die zehn Reiche",
+    "names": "Namen",
+    "halls": "Hallen",
+    "enterRealm": "Betritt",
+    "codexTitle": "Der Kodex",
+    "codexLead": "Alles in dieser Welt, in fünf Sammlungen.",
+    "closingLead": "Der Kodex wächst mit der Welt.",
+    "bifrost": "Bifröst",
+    "open": "Öffnen",
+    "treeTitle": "{count} Welten hängen an einem Baum",
+    "characters": "Charaktere",
+    "places": "Orte",
+    "collectionsTitle": "Erkunde das Universum"
+  },
+  "filters": {
+    "title": "Filter",
+    "results": "Ergebnisse",
+    "clear": "Löschen",
+    "realm": "Reich",
+    "allRealms": "Alle Reiche",
+    "search": "Suchen"
   },
   "sections": {
     "exploreThe": "Erkunden Sie das",
@@ -100,6 +135,38 @@
     "relatedCreatures": "Verwandte Kreaturen",
     "relatedItems": "Verwandte Gegenstände",
     "relatedWorlds": "Verwandte Welten",
-    "relatedPlaces": "Verwandte Orte"
+    "relatedPlaces": "Verwandte Orte",
+    "sealed": "Noch keine Illustration",
+    "back": "Zurück",
+    "readOn": "Weiterlesen"
+  },
+  "footer": {
+    "tagline": "Eine Welt von GYCODING.",
+    "codex": "Kodex",
+    "realms": "Reiche",
+    "rights": "Alle Rechte vorbehalten.",
+    "top": "Nach oben"
+  },
+  "units": {
+    "characters": {
+      "one": "Charakter",
+      "many": "Charaktere"
+    },
+    "creatures": {
+      "one": "Kreatur",
+      "many": "Kreaturen"
+    },
+    "items": {
+      "one": "Gegenstand",
+      "many": "Gegenstände"
+    },
+    "places": {
+      "one": "Ort",
+      "many": "Orte"
+    },
+    "worlds": {
+      "one": "Welt",
+      "many": "Welten"
+    }
   }
 }

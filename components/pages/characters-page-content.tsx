@@ -1,23 +1,34 @@
 "use client";
 
+/**
+ * El salón de los nombres: los 344 personajes.
+ *
+ * Mismo idioma que la home — portada negra arriba, el oro como encuadernación y la luz del reino
+ * como acento — y debajo el códice entero, con la barra de filtros pegada y el carril de runas
+ * para saltar de reino.
+ */
+
 import { CharacterCard } from "@/components/cards/character-card/character-card";
-import { FilterBar } from "@/components/ui/filter-bar/filter-bar";
-import { useTranslations } from "@/hooks/use-translations";
-import { useFilters } from "@/hooks/use-filters";
+import { CodexFilterBar } from "@/components/ui/codex-filter-bar/codex-filter-bar";
+import { Cover, Rule } from "@/components/ui/scene/scene";
 import { CHARACTER_FILTERS } from "@/constants/filters.constants";
+import { useFilters } from "@/hooks/use-filters";
+import { useTranslations } from "@/hooks/use-translations";
 import type { CharacterWithWorld } from "@/types/character.types";
-import { Crown } from "lucide-react";
+import type { World } from "@/types/world.types";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface CharactersPageContentProps {
   characters: CharacterWithWorld[];
+  worlds: World[];
 }
 
-export function CharactersPageContent({
-  characters,
-}: CharactersPageContentProps) {
-  const t = useTranslations();
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-  // Hook de filtros
+export function CharactersPageContent({ characters, worlds }: CharactersPageContentProps) {
+  const t = useTranslations();
+  const reduce = useReducedMotion();
+
   const {
     filteredData,
     filterValues,
@@ -28,66 +39,65 @@ export function CharactersPageContent({
   } = useFilters(characters, CHARACTER_FILTERS);
 
   return (
-    <div className="min-h-screen py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header épico */}
-        <div className="text-center mb-12 sm:mb-16 md:mb-20">
-          <div className="flex justify-center mb-6">
-            <div className="w-12 sm:w-16 md:w-20 h-1 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#A07F4C] via-[#C8AA6E] to-[#785A28] bg-clip-text text-transparent">
-              {t.pages.characters.title}
-            </span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-secondary)] max-w-[800px] mx-auto leading-relaxed font-light">
+    <div className="min-h-screen">
+      <Cover>
+        <motion.div
+          className="text-center"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+        >
+          <h1 className="foil text-5xl leading-none md:text-8xl">{t.pages.characters.title}</h1>
+          <Rule className="mt-7 max-w-[220px]" />
+          <p className="mx-auto mt-7 max-w-[52ch] text-base leading-relaxed text-[#A09B8C] md:text-lg">
             {t.pages.characters.subtitle}
           </p>
-          <div className="flex justify-center mt-8">
-            <div className="relative w-48 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] px-4">
-                <Crown
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--gold)]"
-                  strokeWidth={2}
-                />
-              </div>
+        </motion.div>
+      </Cover>
+
+      <div className="px-4 pb-24 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1600px]">
+          <CodexFilterBar
+            filters={enrichedConfigs}
+            values={filterValues}
+            onFilterChange={setFilterValue}
+            onClearFilters={clearFilters}
+            hasActiveFilters={hasActiveFilters}
+            resultCount={filteredData.length}
+            unit={t.units.characters}
+            worlds={worlds}
+            realmFilterId="world.name"
+          />
+
+          {filteredData.length > 0 ? (
+            <ul className="mt-7 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+              {filteredData.map((character) => (
+                <li key={character.identifier}>
+                  <CharacterCard character={character} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="py-24 text-center sm:py-32">
+              <Rule className="max-w-[160px]" />
+              <p className="mt-8 text-2xl text-[var(--text-primary)]">
+                {t.pages.characters.empty.title}
+              </p>
+              <p className="mt-3 text-base text-[var(--text-secondary)]">
+                {t.pages.characters.empty.description}
+              </p>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="btn-engraved display mt-8 !text-[var(--text-primary)]"
+                >
+                  {t.filters.clear}
+                </button>
+              )}
             </div>
-          </div>
+          )}
         </div>
-
-        {/* Filter Bar */}
-        <FilterBar
-          filters={enrichedConfigs}
-          values={filterValues}
-          onFilterChange={setFilterValue}
-          onClearFilters={clearFilters}
-          hasActiveFilters={hasActiveFilters}
-          resultCount={filteredData.length}
-        />
-
-        {/* Grid de personajes */}
-        {filteredData.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6 lg:gap-8">
-            {filteredData.map((character) => (
-              <CharacterCard key={character.identifier} character={character} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 sm:py-32">
-            <div className="mb-6 flex justify-center">
-              <Crown
-                className="w-12 h-12 sm:w-16 sm:h-16 text-[var(--gold)]"
-                strokeWidth={1.5}
-              />
-            </div>
-            <p className="text-2xl font-bold text-[var(--gold)] mb-4">
-              {t.pages.characters.empty.title}
-            </p>
-            <p className="text-lg text-[var(--text-secondary)]">
-              {t.pages.characters.empty.description}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

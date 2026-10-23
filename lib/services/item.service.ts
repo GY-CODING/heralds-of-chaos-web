@@ -57,6 +57,17 @@ export class ItemService {
       throw new Error("Failed to count items");
     }
   }
+  /**
+   * Una muestra con ilustración para las tiras de la home.
+   */
+  async getIllustrated(limit: number): Promise<Item[]> {
+    try {
+      return await itemRepository.findIllustrated(limit);
+    } catch (error) {
+      console.error("[ItemService.getIllustrated] Error:", error);
+      return [];
+    }
+  }
 }
 
 export const itemService = new ItemService();

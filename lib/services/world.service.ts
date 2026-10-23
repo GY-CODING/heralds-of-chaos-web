@@ -85,6 +85,17 @@ export class WorldService {
       throw new Error("Failed to count worlds");
     }
   }
+  /**
+   * Una muestra con ilustración para las tiras de la home.
+   */
+  async getIllustrated(limit: number): Promise<World[]> {
+    try {
+      return await worldRepository.findIllustrated(limit);
+    } catch (error) {
+      console.error("[WorldService.getIllustrated] Error:", error);
+      return [];
+    }
+  }
 }
 
 export const worldService = new WorldService();

@@ -37,5 +37,10 @@ export default async function CreatureDetailPage({
     notFound();
   }
 
-  return <CreatureDetailContent creature={creature} />;
+  // Otras criaturas con arte, para seguir tirando del hilo.
+  const others = (await creatureService.getIllustrated(7))
+    .filter((c) => c.identifier !== creature.identifier)
+    .slice(0, 6);
+
+  return <CreatureDetailContent creature={creature} others={others} />;
 }

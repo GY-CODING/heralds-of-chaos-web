@@ -18,7 +18,42 @@
     "title": "Heraldos del",
     "chaos": "Caos",
     "description": "Embárcate en un viaje épico a través de la mitología nórdica. Descubre leyendas antiguas, poderosos artefactos y los nueve reinos.",
-    "cta": "Explorar Personajes"
+    "cta": "Explorar Personajes",
+    "heralds": "Heraldos",
+    "joiner": "del",
+    "lead": "Embárcate en un viaje por la mitología nórdica.",
+    "runeHint": "Elige una runa para entrar en su reino.",
+    "enter": "Entra en el códice",
+    "secondary": "Los nueve reinos"
+  },
+  "home": {
+    "scroll": "Baja",
+    "realmsEyebrow": "Yggdrasil",
+    "codexEyebrow": "Las colecciones",
+    "entries": "entradas",
+    "entry": "entrada",
+    "closingTitle": "Cada nombre, cada bestia y cada salón, catalogados.",
+    "realmsTitle": "Los diez reinos",
+    "names": "nombres",
+    "halls": "salones",
+    "enterRealm": "Entra en",
+    "codexTitle": "El códice",
+    "codexLead": "Todo lo que hay en este mundo, en cinco colecciones.",
+    "closingLead": "El códice crece a la vez que el mundo.",
+    "bifrost": "Bifröst",
+    "open": "Abrir",
+    "treeTitle": "{count} mundos cuelgan de un árbol",
+    "characters": "personajes",
+    "places": "lugares",
+    "collectionsTitle": "Explora el universo"
+  },
+  "filters": {
+    "title": "Filtros",
+    "results": "resultados",
+    "clear": "Limpiar",
+    "realm": "Reino",
+    "allRealms": "Todos los reinos",
+    "search": "Buscar"
   },
   "sections": {
     "exploreThe": "Explora el",
@@ -106,6 +141,38 @@
     "relatedCreatures": "Criaturas Relacionadas",
     "relatedItems": "Objetos Relacionados",
     "relatedWorlds": "Mundos Relacionados",
-    "relatedPlaces": "Lugares Relacionados"
+    "relatedPlaces": "Lugares Relacionados",
+    "sealed": "Todavía sin ilustración",
+    "back": "Volver",
+    "readOn": "Sigue leyendo"
+  },
+  "footer": {
+    "tagline": "Un mundo construido por GYCODING.",
+    "codex": "Códice",
+    "realms": "Reinos",
+    "rights": "Todos los derechos reservados.",
+    "top": "Volver arriba"
+  },
+  "units": {
+    "characters": {
+      "one": "personaje",
+      "many": "personajes"
+    },
+    "creatures": {
+      "one": "criatura",
+      "many": "criaturas"
+    },
+    "items": {
+      "one": "ítem",
+      "many": "ítems"
+    },
+    "places": {
+      "one": "lugar",
+      "many": "lugares"
+    },
+    "worlds": {
+      "one": "mundo",
+      "many": "mundos"
+    }
   }
 }

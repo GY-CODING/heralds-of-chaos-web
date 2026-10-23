@@ -36,23 +36,26 @@ export class PlaceService {
         return null;
       }
 
-      // Si el lugar tiene worldId, obtener la información del mundo
-      if (place.worldId) {
-        const world = await worldRepository.findById(place.worldId);
+      // El lugar no guarda su reino: es el reino el que lleva la lista de sus lugares
+      // (`world.places`). Son diez documentos, así que se recorren y ya está. El campo
+      // `place.worldId` existe en el tipo pero ningún registro lo trae.
+      const worlds = await worldRepository.findAll();
+      const world =
+        worlds.find((w) => w.places?.some((id) => id === place._id)) ??
+        (place.worldId ? worlds.find((w) => w._id === place.worldId) : undefined);
 
-        if (world) {
-          return {
-            ...place,
-            world: {
-              identifier: world.identifier,
-              name: world.name,
-              mainColor: world.mainColor,
-            },
-          };
-        }
+      if (world) {
+        return {
+          ...place,
+          world: {
+            identifier: world.identifier,
+            name: world.name,
+            mainColor: world.mainColor,
+            detailedIcon: world.detailedIcon,
+          },
+        };
       }
 
-      // Si no tiene mundo o no se encontró, devolver el lugar sin mundo
       return place;
     } catch (error) {
       console.error(`[PlaceService.getPlaceByIdentifier] Error:`, error);
@@ -81,6 +84,28 @@ export class PlaceService {
     } catch (error) {
       console.error("[PlaceService.countPlaces] Error:", error);
       throw new Error("Failed to count places");
+    }
+  }
+  /**
+   * Una muestra con ilustración para las tiras de la home.
+   */
+  async getIllustrated(limit: number): Promise<Place[]> {
+    try {
+      return await placeRepository.findIllustrated(limit);
+    } catch (error) {
+      console.error("[PlaceService.getIllustrated] Error:", error);
+      return [];
+    }
+  }
+  /**
+   * Lugares concretos por id: los salones que el reino lleva en su lista.
+   */
+  async getByIds(ids: string[], limit?: number): Promise<Place[]> {
+    try {
+      return await placeRepository.findByIds(ids, limit);
+    } catch (error) {
+      console.error("[PlaceService.getByIds] Error:", error);
+      return [];
     }
   }
 }

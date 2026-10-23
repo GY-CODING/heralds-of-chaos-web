@@ -18,7 +18,42 @@
     "title": "Heralds of",
     "chaos": "Chaos",
     "description": "Embark on an epic journey through Norse mythology. Discover ancient legends, powerful artifacts, and the nine realms.",
-    "cta": "Explore Characters"
+    "cta": "Explore Characters",
+    "heralds": "Heralds",
+    "joiner": "of",
+    "lead": "Embark on a journey through Norse mythology.",
+    "runeHint": "Choose a rune to enter its realm.",
+    "enter": "Enter the codex",
+    "secondary": "The nine realms"
+  },
+  "home": {
+    "scroll": "Scroll",
+    "realmsEyebrow": "Yggdrasil",
+    "codexEyebrow": "The collections",
+    "entries": "entries",
+    "entry": "entry",
+    "closingTitle": "Every name, every beast and every hall, catalogued.",
+    "realmsTitle": "The ten realms",
+    "names": "names",
+    "halls": "halls",
+    "enterRealm": "Enter",
+    "codexTitle": "The codex",
+    "codexLead": "Everything in this world, in five collections.",
+    "closingLead": "The codex grows as the world does.",
+    "bifrost": "Bifrost",
+    "open": "Open",
+    "treeTitle": "{count} worlds hang from one tree",
+    "characters": "characters",
+    "places": "places",
+    "collectionsTitle": "Explore the universe"
+  },
+  "filters": {
+    "title": "Filters",
+    "results": "results",
+    "clear": "Clear",
+    "realm": "Realm",
+    "allRealms": "All realms",
+    "search": "Search"
   },
   "sections": {
     "exploreThe": "Explore the",
@@ -106,6 +141,38 @@
     "relatedCreatures": "Related Creatures",
     "relatedItems": "Related Items",
     "relatedWorlds": "Related Worlds",
-    "relatedPlaces": "Related Places"
+    "relatedPlaces": "Related Places",
+    "sealed": "No illustration yet",
+    "back": "Back",
+    "readOn": "Read on"
+  },
+  "footer": {
+    "tagline": "A world built by GYCODING.",
+    "codex": "Codex",
+    "realms": "Realms",
+    "rights": "All rights reserved.",
+    "top": "Back to top"
+  },
+  "units": {
+    "characters": {
+      "one": "character",
+      "many": "characters"
+    },
+    "creatures": {
+      "one": "creature",
+      "many": "creatures"
+    },
+    "items": {
+      "one": "item",
+      "many": "items"
+    },
+    "places": {
+      "one": "place",
+      "many": "places"
+    },
+    "worlds": {
+      "one": "world",
+      "many": "worlds"
+    }
   }
 }

@@ -159,6 +159,52 @@ export abstract class BaseRepository<T extends BaseEntity> {
   }
 
   /**
+   * Devuelve hasta `limit` documentos que sí tienen ilustración.
+   *
+   * Buena parte del códice todavía trae el `none.webp` genérico (288 de 344 personajes, 43 de
+   * 49 criaturas), así que para las tiras de muestra de la home hay que pedir explícitamente
+   * los que tienen arte. Proyección mínima: solo lo que pinta la tira.
+   */
+  async findIllustrated(limit: number): Promise<T[]> {
+    try {
+      const collection = await this.getCollection();
+      const documents = await collection
+        .find({ image: { $not: { $regex: "none\\.webp" } } } as Filter<T>, {
+          limit,
+          projection: { name: 1, identifier: 1, image: 1 },
+        })
+        .toArray();
+      return documents.map((doc) => serializeDocument<T>(doc));
+    } catch (error) {
+      this.handleError("findIllustrated", error);
+      return [];
+    }
+  }
+
+  /**
+   * Trae varios documentos por su `_id`. Lo usan las fichas para enseñar por dónde seguir
+   * (los salones de un reino, por ejemplo).
+   */
+  async findByIds(ids: string[], limit?: number): Promise<T[]> {
+    try {
+      const valid = ids.filter((id) => ObjectId.isValid(id)).map((id) => new ObjectId(id));
+      if (valid.length === 0) return [];
+
+      const collection = await this.getCollection();
+      const documents = await collection
+        .find({ _id: { $in: valid } } as unknown as Filter<T>, {
+          limit,
+          projection: { name: 1, identifier: 1, image: 1 },
+        })
+        .toArray();
+      return documents.map((doc) => serializeDocument<T>(doc));
+    } catch (error) {
+      this.handleError("findByIds", error);
+      return [];
+    }
+  }
+
+  /**
    * Maneja errores del repositorio
    */
   protected handleError(method: string, error: unknown): void {

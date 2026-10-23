@@ -22,6 +22,8 @@ export interface CharacterWithWorld extends Omit<Character, "world"> {
     readonly name: MultiLanguageText;
     readonly mainColor: string;
     readonly image: string;
+    /** La runa del reino. La ficha la usa como sello de pertenencia. */
+    readonly detailedIcon: string;
   };
 }
 

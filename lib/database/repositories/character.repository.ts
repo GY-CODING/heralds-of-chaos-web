@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Filter } from "mongodb";
 import { BaseRepository } from "./base.repository";
 import { COLLECTIONS } from "@/constants/database.constants";
@@ -65,6 +66,77 @@ export class CharacterRepository extends BaseRepository<Character> {
       throw error;
     }
   }
+  /**
+   * Otros nombres del mismo reino, para el final de una ficha. Los que tienen ilustración van
+   * primero: la fila de "por dónde seguir" tiene que dar ganas de seguir.
+   */
+  async findCompanions(
+    worldId: string,
+    excludeIdentifier: string,
+    limit: number,
+  ): Promise<Character[]> {
+    try {
+      const collection = await this.getCollection();
+      const documents = await collection
+        .find({}, { projection: { name: 1, identifier: 1, image: 1, title: 1, world: 1 } })
+        .toArray();
+
+      return documents
+        .filter(
+          (d: any) =>
+            worldIdOf(d.world) === worldId && d.identifier !== excludeIdentifier,
+        )
+        .sort((a: any, b: any) => {
+          const art = (d: any) => (d.image && !String(d.image).includes("none.webp") ? 0 : 1);
+          return art(a) - art(b);
+        })
+        .slice(0, limit)
+        .map((doc) => ({
+          ...doc,
+          _id: doc._id.toString(),
+          world: worldIdOf((doc as any).world) ?? "",
+        })) as unknown as Character[];
+    } catch (error) {
+      this.handleError("findCompanions", error);
+      return [];
+    }
+  }
+
+  /**
+   * Cuántos personajes vive cada mundo, por id de mundo.
+   *
+   * Se lee en bruto (solo el campo `world`) y se agrupa en JS en vez de con un `$group` de
+   * MongoDB: la referencia al mundo está guardada como DBRef y su forma exacta cambia entre
+   * registros, así que normalizarla aquí es lo único que funciona con todos.
+   */
+  async countByWorld(): Promise<Record<string, number>> {
+    try {
+      const collection = await this.getCollection();
+      const documents = await collection
+        .find({}, { projection: { world: 1 } })
+        .toArray();
+
+      const census: Record<string, number> = {};
+      for (const document of documents) {
+        const id = worldIdOf((document as any).world);
+        if (id) census[id] = (census[id] ?? 0) + 1;
+      }
+      return census;
+    } catch (error) {
+      this.handleError("countByWorld", error);
+      return {};
+    }
+  }
+}
+
+/** La referencia al mundo llega como string, como DBRef o como ObjectId. */
+function worldIdOf(value: any): string | null {
+  if (!value) return null;
+  if (typeof value === "string") return value;
+  if (value.$id) return value.$id.$oid ?? value.$id.toString();
+  if (value.oid) return value.oid.toString();
+  if (typeof value.toString === "function") return value.toString();
+  return null;
 }
 
 export const characterRepository = new CharacterRepository();

@@ -40,8 +40,9 @@ function mapCharactersWithWorlds(
         world: {
           identifier: "unknown",
           name: { en: "Unknown", es: "Desconocido", de: "Unbekannt" },
-          mainColor: "#888888",
+          mainColor: "#C8AA6E",
           image: "",
+          detailedIcon: "",
         },
       };
     }
@@ -56,8 +57,9 @@ function mapCharactersWithWorlds(
         world: {
           identifier: "unknown",
           name: { en: "Unknown", es: "Desconocido", de: "Unbekannt" },
-          mainColor: "#888888",
+          mainColor: "#C8AA6E",
           image: "",
+          detailedIcon: "",
         },
       };
     }
@@ -69,6 +71,7 @@ function mapCharactersWithWorlds(
         name: world.name,
         mainColor: world.mainColor,
         image: world.image,
+        detailedIcon: world.detailedIcon,
       },
     };
   });
@@ -86,5 +89,5 @@ export default async function CharactersPage() {
   // Mapear characters con sus worlds
   const charactersWithWorlds = mapCharactersWithWorlds(characters, worlds);
 
-  return <CharactersPageContent characters={charactersWithWorlds} />;
+  return <CharactersPageContent characters={charactersWithWorlds} worlds={worlds} />;
 }

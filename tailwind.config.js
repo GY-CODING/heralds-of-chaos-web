@@ -4,7 +4,7 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class",
+  // Sin modo claro: la web es oscura siempre (ver :root en globals.css).
   theme: {
     extend: {
       colors: {

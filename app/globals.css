@@ -1,5 +1,3 @@
-@import url('https://fonts.cdnfonts.com/css/penumbra-half-serif-std');
-
 @font-face {
   font-family: 'Penumbra';
   src: url('/fonts/penumbra.otf') format('opentype');
@@ -21,89 +19,103 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light Theme Variables */
+  /* ──────────────────────────────────────────────────────────────────────
+     Dos sistemas de color conviven en la web:
+
+       · El códice  — negro, hueso y oro. Es la encuadernación: reglas,
+                      cifras, el nombre. Cambia con el tema (claro = papel).
+       · La luz del reino — los diez `mainColor` que vienen de la base de
+                      datos. Solo se usan como LUZ (runa, resplandor, filete
+                      de 1px, anillo al pasar por encima), nunca como relleno
+                      de una superficie. Así el negro y el oro siguen mandando
+                      y cada reino se reconoce de un vistazo.
+     ────────────────────────────────────────────────────────────────────── */
   :root {
-    /* Gold Colors */
+    /* Oro */
     --gold: #C8AA6E;
     --gold-light: #F0E6D2;
     --gold-dark: #785A28;
 
-    /* Background Colors - Tonos beige/crema en lugar de blanco */
-    --background: #E8E4DC;
-    --background-alt: #D4CFC4;
+    /* Los tramos de portada (la puerta, el árbol, el cierre, las cabeceras de colección) y el
+       resto de la web comparten negro: **no hay tema claro**. Se quitó a propósito — es la
+       portada de un juego y el oro y el arte piden negro. */
+    --void: #06060A;
+    --void-deep: #030305;
+    --bone: #F0E6D2;
+    --ash: #A09B8C;
+    --ash-dim: #6A6A6A;
 
-    /* Surface Colors - Crema suave en lugar de blanco puro */
-    --surface: #F5F2EB;
-    --surface-elevated: rgba(245, 242, 235, 0.9);
-    --surface-hover: rgba(200, 170, 110, 0.08);
-
-    /* Border Colors */
-    --border: rgba(120, 90, 40, 0.12);
-    --border-strong: rgba(120, 90, 40, 0.2);
-
-    /* Text Colors */
-    --text-primary: #2A2520;
-    --text-secondary: #5A534D;
-    --text-tertiary: #8A837C;
-
-    /* Shadow Colors */
-    --shadow-sm: 0 1px 2px rgba(42, 37, 32, 0.04);
-    --shadow-md: 0 4px 8px rgba(42, 37, 32, 0.06);
-    --shadow-lg: 0 8px 16px rgba(42, 37, 32, 0.08);
-    --shadow-xl: 0 12px 24px rgba(42, 37, 32, 0.1);
-    --shadow-gold: 0 4px 12px rgba(200, 170, 110, 0.2);
-  }
-
-  /* Dark Theme Variables */
-  .dark {
-    /* Gold Colors */
-    --gold: #C8AA6E;
-    --gold-light: #F0E6D2;
-    --gold-dark: #785A28;
-
-    /* Background Colors */
-    --background: #0A0A0A;
-    --background-alt: #141414;
-
-    /* Surface Colors */
-    --surface: #1A1A1A;
-    --surface-elevated: rgba(26, 26, 26, 0.9);
+    --background: #08080B;
+    --background-alt: #101014;
+    --surface: #131317;
+    --surface-elevated: rgba(19, 19, 23, 0.9);
     --surface-hover: rgba(200, 170, 110, 0.06);
 
-    /* Border Colors */
-    --border: rgba(200, 170, 110, 0.08);
-    --border-strong: rgba(200, 170, 110, 0.15);
+    --border: rgba(200, 170, 110, 0.1);
+    --border-strong: rgba(200, 170, 110, 0.18);
 
-    /* Text Colors */
     --text-primary: #F0E6D2;
     --text-secondary: #A09B8C;
     --text-tertiary: #6A6A6A;
 
-    /* Shadow Colors */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
     --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.7);
     --shadow-gold: 0 4px 12px rgba(200, 170, 110, 0.25);
+
+    /* Alto de la cabecera: la barra de filtros se pega justo debajo. */
+    --header-h: 64px;
+
+    /* Reino activo. Lo reescribe cada tramo con el `mainColor` de su reino. */
+    --realm: #C8AA6E;
   }
 
-  /* Base Styles */
+  @media (min-width: 768px) {
+    :root {
+      --header-h: 72px;
+    }
+  }
+
   * {
     @apply border-[var(--border)];
   }
 
   body {
     @apply bg-[var(--background)] text-[var(--text-primary)] antialiased;
-    font-family: 'Plantin', 'Georgia', serif;
+    font-family: 'Plantin', 'Iowan Old Style', Georgia, serif;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Títulos usan Penumbra */
-  h1, h2, h3, h4, h5, h6, li, a {
-    font-family: 'Penumbra', 'Georgia', serif;
+  /* Penumbra es una capitular grabada: sirve para nombres, cifras y rótulos,
+     no para leer. Antes también la heredaban `li` y `a`, así que cualquier
+     párrafo dentro de un enlace salía en versalitas y no había jerarquía.
+     Ahora el texto corrido es siempre Plantin. */
+  h1, h2, h3, h4, h5, h6,
+  .display {
+    font-family: 'Penumbra', 'Trajan Pro', Georgia, serif;
+    font-synthesis: none;
   }
 
-  /* Custom Scrollbar */
+  /* Cifras del códice: tabulares, para que los recuentos no bailen. */
+  .numeral {
+    font-family: 'Penumbra', Georgia, serif;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  ::selection {
+    background: rgba(200, 170, 110, 0.3);
+    color: var(--gold-light);
+  }
+
+  /* Un solo foco visible en toda la web, también sobre los tramos oscuros. */
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -115,7 +127,6 @@
 
   ::-webkit-scrollbar-thumb {
     @apply bg-[var(--gold-dark)] rounded-full;
-    transition: background-color 0.2s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -124,7 +135,85 @@
 }
 
 @layer components {
-  /* Card Components */
+  /* ── Chapa ───────────────────────────────────────────────────────────
+     La pieza de superficie del códice. No es una tarjeta con sombra: es una
+     chapa con filete fino, esquinas poco redondeadas y luz dentro. */
+  .plate {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+  }
+
+  .plate-dark {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 60%), #0B0B10;
+    border: 1px solid rgba(200, 170, 110, 0.16);
+    border-radius: 14px;
+  }
+
+  /* Botón de pan de oro: el único relleno dorado de toda la web. */
+  .btn-foil {
+    @apply inline-flex items-center justify-center rounded-xl px-7 text-[15px];
+    height: 52px;
+    color: #14100A;
+    background-image: linear-gradient(104deg, #785A28 0%, #C8AA6E 22%, #F0E6D2 38%, #C8AA6E 54%, #EADFC4 68%, #9D7F44 88%, #785A28 100%);
+    border: 1px solid #C8AA6E;
+    transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.3s ease;
+  }
+
+  .btn-foil:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -12px rgba(200, 170, 110, 0.75);
+  }
+
+  .btn-foil:active {
+    transform: translateY(0) scale(0.985);
+    transition-duration: 0.06s;
+  }
+
+  /* Pan de oro apagado: el mismo metal, sin el destello blanco del centro. Es el botón del
+     hero — ahí el nombre ya lleva todo el brillo y el botón no tiene que competir. */
+  .btn-foil-soft {
+    @apply inline-flex items-center justify-center rounded-xl px-7 text-[15px];
+    height: 52px;
+    color: #14100A;
+    background-image: linear-gradient(100deg, #7A5E2B 0%, #B99F68 38%, #CBB27D 52%, #A2854A 78%, #7A5E2B 100%);
+    border: 1px solid rgba(200, 170, 110, 0.75);
+    transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1), filter 0.3s ease;
+  }
+
+  .btn-foil-soft:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+  }
+
+  .btn-foil-soft:active {
+    transform: translateY(0) scale(0.985);
+    transition-duration: 0.06s;
+  }
+
+  /* Botón grabado: filete de oro sobre el negro. */
+  .btn-engraved {
+    @apply inline-flex items-center justify-center rounded-xl px-6 text-[15px];
+    height: 52px;
+    color: var(--bone);
+    border: 1px solid rgba(200, 170, 110, 0.4);
+    background: rgba(200, 170, 110, 0.04);
+    transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1), border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .btn-engraved:hover {
+    border-color: var(--gold);
+    background: rgba(200, 170, 110, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .btn-engraved:active {
+    transform: translateY(0) scale(0.985);
+    transition-duration: 0.06s;
+  }
+
+  /* Clases que siguen usando las páginas que aún no se han reescrito. */
   .card-base {
     @apply bg-[var(--surface)] rounded-2xl border border-[var(--border)] transition-all duration-300;
     box-shadow: var(--shadow-sm);
@@ -134,129 +223,126 @@
     @apply hover:shadow-[var(--shadow-gold)] hover:-translate-y-1;
   }
 
-  .card-hover:hover {
-    border-color: var(--border-hover);
-  }
-
-  /* Button Components */
-  .btn-primary {
-    @apply px-8 py-3 bg-[var(--gold)] text-[var(--background)] rounded-full font-medium;
-    @apply hover:bg-[var(--gold-light)] hover:shadow-[var(--shadow-gold)];
-    @apply transition-all duration-300 hover:scale-105;
-  }
-
-  .btn-secondary {
-    @apply px-8 py-3 bg-[var(--surface)] text-[var(--gold)] rounded-full font-medium;
-    @apply border border-[var(--gold)] hover:border-[var(--gold-light)] hover:bg-[var(--surface-hover)];
-    @apply transition-all duration-300 hover:scale-105;
-  }
-
-  /* Text Utilities */
-  .text-gold {
-    @apply text-[var(--gold)];
-  }
-
-  .text-gold-light {
-    @apply text-[var(--gold-light)];
-  }
-
-  /* Glass Morphism */
   .glass-morphism {
     @apply backdrop-blur-xl border border-[var(--border)];
-    background: rgba(245, 242, 235, 0.85);
-  }
-
-  .dark .glass-morphism {
-    background: rgba(26, 26, 26, 0.9);
+    background: rgba(12, 12, 16, 0.82);
   }
 }
 
 @layer utilities {
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  /* ── Pan de oro ───────────────────────────────────────────────────────
+     La luz recorre la letra, así se lee como metal y no como un amarillo.
+     `.foil-adaptive` quedó como alias de `.foil` al quitar el tema claro; se mantiene el nombre
+     porque lo usan el códice y las cabeceras. */
+  .foil,
+  .foil-adaptive {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* El degradado se pinta sobre la caja del elemento y la letra solo se ve donde hay pintura.
+       Con un interlineado apretado (0,84 en el monumento) la caja es más baja que los glifos de
+       Penumbra, así que la parte de arriba y de abajo de las letras se quedaba sin pintar: el
+       "of" y el "chaos" salían cortados. El relleno agranda la caja y el margen negativo deshace
+       el hueco, así que el texto no se mueve ni un píxel. */
+    padding-block: 0.2em;
+    margin-block: -0.2em;
+    background-image: linear-gradient(
+      104deg,
+      #785a28 0%,
+      #c8aa6e 22%,
+      #f0e6d2 38%,
+      #c8aa6e 54%,
+      #eadfc4 68%,
+      #9d7f44 88%,
+      #785a28 100%
+    );
   }
 
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Grabado: el hueso con un filo de luz arriba y sombra abajo, como una
+     letra tallada en piedra. Solo sobre fondo oscuro. */
+  .engraved {
+    color: var(--bone);
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.12),
+      0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 14px 40px rgba(0, 0, 0, 0.6);
   }
 
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  /* Capitular: la primera letra del texto de una ficha, grabada, como en un tomo.
+     Color plano a propósito — el pan de oro necesita `background-clip: text` y en
+     `::first-letter` no es de fiar: si falla, la letra se queda invisible. */
+  .dropcap::first-letter {
+    font-family: 'Penumbra', Georgia, serif;
+    float: left;
+    font-size: 3.1em;
+    line-height: 0.8;
+    margin: 0.06em 0.09em 0 0;
+    color: var(--gold);
   }
 
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
+  /* ── La escena ────────────────────────────────────────────────────────
+     Solo transform y opacity: nada de blur animado ni de repintar fondos. */
+  @keyframes emberRise {
+    0%   { transform: translate3d(0, 18vh, 0); opacity: 0; }
+    12%  { opacity: 0.85; }
+    88%  { opacity: 0.5; }
+    100% { transform: translate3d(2vw, -100vh, 0); opacity: 0; }
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+  @keyframes auroraDrift {
+    0%   { transform: translate3d(-6%, 0, 0) scale(1.05); }
+    100% { transform: translate3d(6%, -3%, 0) scale(1.18); }
   }
 
-  @keyframes glow {
-    0%, 100% {
-      text-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
-    }
-    50% {
-      text-shadow: 0 0 20px rgba(200, 170, 110, 0.5);
-    }
+  @keyframes sealSpin {
+    to { transform: rotate(360deg); }
   }
 
-  /* Animation Classes */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
+  @keyframes sealSpinBack {
+    to { transform: rotate(-360deg); }
   }
 
-  .animate-slide-up {
-    animation: slideUp 0.6s ease-out;
+  @keyframes breathe {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 0.85; }
   }
 
-  .animate-scale-in {
-    animation: scaleIn 0.5s ease-out;
+  .animate-ember {
+    animation: emberRise var(--ember-duration, 24s) linear var(--ember-delay, 0s) infinite;
+    will-change: transform, opacity;
   }
 
-  .animate-shimmer {
-    animation: shimmer 3s linear infinite;
+  .animate-aurora {
+    animation: auroraDrift 26s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+  .animate-seal {
+    animation: sealSpin 90s linear infinite;
+    will-change: transform;
   }
 
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite;
+  .animate-seal-slow {
+    animation: sealSpin 220s linear infinite;
+    will-change: transform;
   }
 
-  /* Hide scrollbar but keep functionality */
+  .animate-seal-back {
+    animation: sealSpinBack 160s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-breathe {
+    animation: breathe 7s ease-in-out infinite;
+  }
+
+  /* Rebote corto: lo que responde al puntero sale con un pelín de pasada y
+     vuelve. Es lo que separa un hover plano de algo que "se siente". */
+  .ease-pop {
+    transition-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -264,5 +350,16 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ember,
+    .animate-aurora,
+    .animate-seal,
+    .animate-seal-slow,
+    .animate-seal-back,
+    .animate-breathe {
+      animation: none !important;
+    }
   }
 }

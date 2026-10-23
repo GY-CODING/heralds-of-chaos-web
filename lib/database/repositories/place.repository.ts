@@ -11,22 +11,6 @@ export class PlaceRepository extends BaseRepository<Place> {
   protected collectionName = COLLECTIONS.PLACES;
 
   /**
-   * Encuentra lugares por IDs
-   */
-  async findByIds(ids: string[]): Promise<Place[]> {
-    try {
-      const filter: Filter<Place> = {
-        _id: { $in: ids },
-      } as Filter<Place>;
-
-      return await this.findByFilter(filter);
-    } catch (error) {
-      this.handleError("findByIds", error);
-      throw error;
-    }
-  }
-
-  /**
    * Encuentra lugares aplicando filtros
    */
   async findWithFilters(filters: PlaceFilters): Promise<Place[]> {

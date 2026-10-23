@@ -4,6 +4,7 @@
 import type { MultiLanguageText } from "@/types/common.types";
 import type {
   FilterConfig,
+  FilterValueUpdater,
   FilterValues,
   SelectFilterConfig,
   UseFiltersResult,
@@ -159,10 +160,10 @@ export function useFilters<T extends Record<string, any>>(
   /**
    * Actualiza el valor de un filtro específico
    */
-  const setFilterValue = (filterId: string, value: string | string[]) => {
+  const setFilterValue = (filterId: string, value: FilterValueUpdater) => {
     setFilterValues((prev) => ({
       ...prev,
-      [filterId]: value,
+      [filterId]: typeof value === "function" ? value(prev[filterId]) : value,
     }));
   };
 
@@ -177,7 +178,7 @@ export function useFilters<T extends Record<string, any>>(
    * Verifica si hay filtros activos
    */
   const hasActiveFilters = useMemo(() => {
-    return Object.entries(filterValues).some(([value]) => {
+    return Object.entries(filterValues).some(([, value]) => {
       if (Array.isArray(value)) {
         return value.length > 0;
       }

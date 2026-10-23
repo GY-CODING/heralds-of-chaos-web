@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { worldService } from "@/lib/services/world.service";
+import { characterService } from "@/lib/services/character.service";
+import { placeService } from "@/lib/services/place.service";
 import { WorldDetailContent } from "@/components/pages/world-detail-content";
 import type { Metadata } from "next";
 
@@ -37,5 +39,20 @@ export default async function WorldDetailPage({
     notFound();
   }
 
-  return <WorldDetailContent world={world} />;
+  // Sus salones y cuánta gente vive en él.
+  const placeIds = (world.places ?? []).filter(
+    (id): id is string => typeof id === "string",
+  );
+  const [places, census] = await Promise.all([
+    placeService.getByIds(placeIds.slice(0, 6)),
+    characterService.getWorldCensus(),
+  ]);
+
+  return (
+    <WorldDetailContent
+      world={world}
+      places={places}
+      names={census[world._id] ?? 0}
+    />
+  );
 }

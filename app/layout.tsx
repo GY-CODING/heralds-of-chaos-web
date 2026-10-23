@@ -1,14 +1,8 @@
+import { Footer } from "@/components/layout/footer/footer";
 import { Header } from "@/components/layout/header/header";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { worldService } from "@/lib/services/world.service";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = {
   title: "Heralds of Chaos",
@@ -35,14 +29,9 @@ export const metadata: Metadata = {
         url: "/images/hoc.png",
         width: 1200,
         height: 630,
-        alt: "Heralds of Chaos Logo",
+        alt: "Heralds of Chaos",
       },
     ],
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
   },
   robots: {
     index: true,
@@ -55,25 +44,38 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-export default function RootLayout({
+/**
+ * `viewport` va aparte de `metadata` (si no, Next avisa en cada página). Sin `maximumScale`:
+ * impedir el zoom deja fuera a quien lo necesita para leer.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#06060A",
+};
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Los reinos del pie salen de la base de datos, como los de la home.
+  const worlds = await worldService.getAllWorlds();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
-        <link rel="icon" href="/images/hoc.png" />
-        <meta name="theme-color" content="#0a0a0a" />
+        {/* Las dos fuentes son locales y pequeñas (42 kB y 29 kB), pero el navegador no las pide
+            hasta que algo las usa: con `font-display: swap` el nombre se repintaba a mitad de
+            carga y movía media portada (CLS 0,09 en móvil lento). Pedirlas desde el principio
+            lo quita. */}
+        <link rel="preload" href="/fonts/penumbra.otf" as="font" type="font/otf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/plantin.otf" as="font" type="font/otf" crossOrigin="anonymous" />
       </head>
-      <body
-        className={`${inter.variable} antialiased`}
-        suppressHydrationWarning
-      >
-        <ThemeProvider>
-          <Header />
-          <main>{children}</main>
-        </ThemeProvider>
+      <body className="antialiased">
+        <Header />
+        <main>{children}</main>
+        <Footer worlds={worlds} />
       </body>
     </html>
   );

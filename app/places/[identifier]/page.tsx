@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { placeService } from "@/lib/services/place.service";
+import { worldService } from "@/lib/services/world.service";
 import { PlaceDetailContent } from "@/components/pages/place-detail-content";
 import type { Metadata } from "next";
 
@@ -37,5 +38,13 @@ export default async function PlaceDetailPage({
     notFound();
   }
 
-  return <PlaceDetailContent place={place} />;
+  // Los demás salones del mismo reino.
+  const worlds = await worldService.getAllWorlds();
+  const world = worlds.find((w) => w.identifier === place.world?.identifier);
+  const neighbourIds = (world?.places ?? [])
+    .filter((id): id is string => typeof id === "string" && id !== place._id)
+    .slice(0, 6);
+  const neighbours = await placeService.getByIds(neighbourIds);
+
+  return <PlaceDetailContent place={place} neighbours={neighbours} />;
 }

@@ -15,6 +15,8 @@ export interface PlaceWithWorld extends BaseEntity {
     readonly identifier: string;
     readonly name: MultiLanguageText;
     readonly mainColor: string;
+    /** La runa del reino, para el sello de la lámina. */
+    readonly detailedIcon: string;
   };
 }
 

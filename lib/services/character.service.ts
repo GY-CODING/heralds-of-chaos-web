@@ -78,6 +78,46 @@ export class CharacterService {
       throw new Error("Failed to count characters");
     }
   }
+  /**
+   * Una muestra con ilustración para las tiras de la home.
+   */
+  async getIllustrated(limit: number): Promise<Character[]> {
+    try {
+      return await characterRepository.findIllustrated(limit);
+    } catch (error) {
+      console.error("[CharacterService.getIllustrated] Error:", error);
+      return [];
+    }
+  }
+
+  /**
+   * Cuántos personajes hay en cada mundo, por id de mundo. Alimenta las cifras reales del
+   * índice de reinos de la home.
+   */
+  async getWorldCensus(): Promise<Record<string, number>> {
+    try {
+      return await characterRepository.countByWorld();
+    } catch (error) {
+      console.error("[CharacterService.getWorldCensus] Error:", error);
+      return {};
+    }
+  }
+  /**
+   * Otros nombres del mismo reino, para el final de una ficha.
+   */
+  async getCompanions(
+    worldId: string,
+    excludeIdentifier: string,
+    limit = 6,
+  ): Promise<Character[]> {
+    try {
+      if (!worldId) return [];
+      return await characterRepository.findCompanions(worldId, excludeIdentifier, limit);
+    } catch (error) {
+      console.error("[CharacterService.getCompanions] Error:", error);
+      return [];
+    }
+  }
 }
 
 export const characterService = new CharacterService();

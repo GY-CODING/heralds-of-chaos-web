@@ -57,6 +57,17 @@ export class CreatureService {
       throw new Error("Failed to count creatures");
     }
   }
+  /**
+   * Una muestra con ilustración para las tiras de la home.
+   */
+  async getIllustrated(limit: number): Promise<Creature[]> {
+    try {
+      return await creatureRepository.findIllustrated(limit);
+    } catch (error) {
+      console.error("[CreatureService.getIllustrated] Error:", error);
+      return [];
+    }
+  }
 }
 
 export const creatureService = new CreatureService();

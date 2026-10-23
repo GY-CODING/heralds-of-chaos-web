@@ -1,161 +1,300 @@
 "use client";
 
+/**
+ * Los diez reinos: la pantalla de selección de mundo.
+ *
+ * Es la escena que antes abría la home y que más gustó: el arte real de cada reino a pantalla
+ * completa, fijado, cambiando al bajar, con el índice de runas al lado. Aquí tiene más sentido
+ * que en la home — la home enseña el árbol y esta página es el mapa.
+ *
+ * En móvil, los diez como tarjetas, una detrás de otra.
+ */
+
+import { ROUTES } from "@/constants/routes.constants";
 import { useLanguage } from "@/hooks/use-language";
 import { useTranslations } from "@/hooks/use-translations";
+import { Cover, realmInk, rgbOf, Rule, RuneSigil, VOID } from "@/components/ui/scene/scene";
 import type { World } from "@/types/world.types";
-import { motion } from "framer-motion";
-import { MapPin, TreePine } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+/* ── El pase de un reino al siguiente ───────────────────────────────────────
+   Suave y limpio: un fundido con un desplazamiento mínimo, sin máscaras ni escalonados. La
+   escena ya es grande (el arte ocupa la pantalla entera), así que el texto solo tiene que
+   relevarse sin llamar la atención. `AnimatePresence mode="popLayout"` saca del flujo al reino
+   que se va para que los dos se solapen y no haya parón al bajar rápido. */
+const PASS: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: EASE } },
+  out: { opacity: 0, y: -8, transition: { duration: 0.35, ease: "easeOut" } },
+};
 
 interface WorldsPageContentProps {
   worlds: World[];
+  census: Record<string, number>;
 }
 
-export function WorldsPageContent({ worlds }: WorldsPageContentProps) {
+export function WorldsPageContent({ worlds, census }: WorldsPageContentProps) {
   const t = useTranslations();
   const { language } = useLanguage();
+  const reduce = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const marks = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.i));
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" },
+    );
+    marks.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  if (worlds.length === 0) return null;
+
+  const current = worlds[Math.min(active, worlds.length - 1)];
+  const name = (w: World) => w.name[language] ?? w.name.en;
+  const description = (w: World) => w.description[language] ?? w.description.en;
+  const characters = (w: World) => census[w._id] ?? 0;
+  const places = (w: World) => w.places?.length ?? 0;
 
   return (
-    <div className="min-h-screen py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 relative">
-      {/* Background decorativo estático - mucho más performante */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[var(--gold)]/10 via-purple-500/5 to-transparent rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/5 via-[var(--gold)]/10 to-transparent rounded-full" />
-      </div>
-
-      <div className="max-w-[1600px] mx-auto relative z-10">
-        {/* Header épico */}
-        <div className="text-center mb-12 sm:mb-16 md:mb-20">
-          <div className="flex justify-center mb-6">
-            <div className="w-12 sm:w-16 md:w-20 h-1 bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#A07F4C] via-[#C8AA6E] to-[#785A28] bg-clip-text text-transparent">
-              {t.pages.worlds.title}
-            </span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-secondary)] max-w-[800px] mx-auto leading-relaxed font-light">
+    <div className="min-h-screen" style={{ background: VOID }}>
+      <Cover tint={current.mainColor}>
+        <motion.div
+          className="text-center"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+        >
+          <h1 className="foil text-5xl leading-none md:text-8xl">{t.pages.worlds.title}</h1>
+          <Rule className="mt-7 max-w-[220px]" />
+          <p className="mx-auto mt-7 max-w-[52ch] text-base leading-relaxed text-[#A09B8C] md:text-lg">
             {t.pages.worlds.subtitle}
           </p>
-          <div className="flex justify-center mt-8">
-            <div className="relative w-48 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] px-4">
-                <TreePine
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--gold)]"
-                  strokeWidth={2}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        </motion.div>
+      </Cover>
 
-        {/* Grid de mundos */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6 lg:gap-8">
-          {worlds.map((world, index) => (
-            <WorldCard
-              key={world.identifier}
-              world={world}
-              index={index}
-              language={language}
+      {/* Móvil: los reinos, uno detrás de otro. */}
+      <ol className="list-none px-5 py-14 md:hidden">
+        {worlds.map((w, i) => (
+          <motion.li
+            key={w.identifier}
+            className="mb-6"
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
+            <Link
+              href={ROUTES.WORLD_DETAIL(w.identifier)}
+              className="group block overflow-hidden rounded-2xl border"
+              style={{ borderColor: `rgba(${rgbOf(w.mainColor)},0.28)` }}
+            >
+              <div className="relative aspect-[16/10]">
+                <Image
+                  src={w.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 1px, 100vw"
+                  className="object-cover"
+                  loading={i < 2 ? "eager" : "lazy"}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06060A] via-[#06060A]/50 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end gap-3 p-4">
+                  <RuneSigil src={w.detailedIcon} color={w.mainColor} size={40} lit />
+                  <div className="min-w-0">
+                    <p className="numeral text-[11px] tracking-[0.2em] text-[#8A8578]">{ROMAN[i]}</p>
+                    <p
+                      className="display truncate text-2xl leading-none"
+                      style={{ color: realmInk(w.mainColor) }}
+                    >
+                      {name(w)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 pb-4 pt-3.5">
+                <p className="text-[15px] leading-relaxed text-[#A09B8C]">{description(w)}</p>
+                <p className="mt-3.5 flex items-center gap-5 text-[13px] text-[#6A6A6A]">
+                  <span>
+                    <span className="numeral mr-1.5 text-base text-[#F0E6D2]">{characters(w)}</span>
+                    {t.home.characters}
+                  </span>
+                  <span>
+                    <span className="numeral mr-1.5 text-base text-[#F0E6D2]">{places(w)}</span>
+                    {t.home.places}
+                  </span>
+                </p>
+              </div>
+            </Link>
+          </motion.li>
+        ))}
+      </ol>
+
+      {/* Escritorio: la escena se queda fija y el reino cambia al bajar. */}
+      <div className="relative hidden md:block" style={{ height: `${worlds.length * 58}svh` }}>
+        <div aria-hidden className="absolute inset-0">
+          {worlds.map((w, i) => (
+            <div
+              key={w.identifier}
+              data-i={i}
+              ref={(el) => {
+                marks.current[i] = el;
+              }}
+              style={{ height: "58svh" }}
             />
           ))}
         </div>
-      </div>
-    </div>
-  );
-}
 
-/**
- * Card minimalista y elegante, consistente con el resto de la aplicación
- */
-function WorldCard({
-  world,
-  index,
-  language,
-}: {
-  world: World;
-  index: number;
-  language: "en" | "es";
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.05,
-      }}
-      whileHover={{ y: -4 }}
-    >
-      <Link
-        href={`/worlds/${world.identifier}`}
-        className="group block relative overflow-hidden rounded-xl sm:rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all duration-500 hover:border-[var(--gold)] hover:shadow-[var(--shadow-gold)]"
-      >
-        {/* Imagen con overlay gradiente */}
-        <div className="relative w-full aspect-square sm:aspect-[3/4] overflow-hidden bg-[var(--background-alt)]">
-          <Image
-            src={world.image}
-            alt={world.name[language] || world.name.en || "World"}
-            fill
-            className="object-cover transition-all duration-700 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            priority={index < 5}
+        <div className="sticky top-0 z-10 h-svh overflow-hidden">
+          {worlds.map((w, i) => (
+            <div
+              key={w.identifier}
+              className="absolute inset-0 transition-[opacity,transform] duration-[900ms] ease-out motion-reduce:transition-none"
+              style={{
+                opacity: i === active ? 1 : 0,
+                transform: i === active ? "scale(1)" : "scale(1.05)",
+              }}
+              aria-hidden={i !== active}
+            >
+              <Image
+                src={w.image}
+                alt=""
+                fill
+                sizes="(min-width: 768px) 100vw, 1px"
+                className="object-cover"
+                loading={i === 0 ? "eager" : "lazy"}
+              />
+            </div>
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#06060A] via-[#06060A]/78 to-[#06060A]/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06060A] via-transparent to-[#06060A]/75" />
+          <div
+            className="absolute inset-0 transition-[background] duration-700"
+            style={{
+              background: `radial-gradient(70% 60% at 76% 48%, rgba(${rgbOf(current.mainColor)},0.2) 0%, transparent 70%)`,
+            }}
           />
 
-          {/* Gradiente overlay sutil */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent opacity-90" />
+          <div className="relative flex h-full items-center px-10 lg:px-16">
+            <div className="mx-auto flex w-full max-w-[1400px] items-center gap-14">
+              {/* El índice de los diez reinos, con su runa. */}
+              <ol className="w-[232px] shrink-0 space-y-1" aria-hidden>
+                {worlds.map((w, i) => (
+                  <li
+                    key={w.identifier}
+                    className="flex items-center gap-3 py-1 transition-opacity duration-500"
+                    style={{ opacity: i === active ? 1 : 0.52 }}
+                  >
+                    <RuneSigil
+                      src={w.detailedIcon}
+                      color={w.mainColor}
+                      size={i === active ? 30 : 22}
+                      lit={i === active}
+                    />
+                    <span
+                      className="display text-sm tracking-[0.04em] transition-colors duration-500"
+                      style={{ color: i === active ? realmInk(w.mainColor) : "#A09B8C" }}
+                    >
+                      {name(w)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
 
-          {/* Brillo dorado en hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/0 via-[var(--gold)]/5 to-[var(--gold)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
+              {/* aria-live: bajo el mismo encabezado, el reino cambia al bajar. */}
+              <div className="relative max-w-[620px]" aria-live="polite">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.div
+                    key={current.identifier}
+                    variants={reduce ? undefined : PASS}
+                    initial="hidden"
+                    animate="show"
+                    exit="out"
+                  >
+                    <p className="numeral text-xs tracking-[0.3em] text-[#6A6A6A]">
+                      {ROMAN[active]}
+                    </p>
+                    <p
+                      className="display mt-5 text-5xl leading-[1.08] lg:text-7xl"
+                      style={{ color: realmInk(current.mainColor) }}
+                    >
+                      {name(current)}
+                    </p>
+                    <div
+                      aria-hidden
+                      className="mt-6 h-px w-24"
+                      style={{
+                        background: `linear-gradient(to right, ${current.mainColor}, transparent)`,
+                      }}
+                    />
+                    <p className="mt-6 max-w-[520px] text-lg leading-relaxed text-[#C5BFB2]">
+                      {description(current)}
+                    </p>
 
-        {/* Contenido */}
-        <div className="p-2 sm:p-4 md:p-5 space-y-1 sm:space-y-2">
-          {/* Nombre del mundo */}
-          <h3 className="text-sm sm:text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors duration-300 line-clamp-1">
-            {world.name[language]}
-          </h3>
+                    <div className="mt-8 flex items-center gap-10">
+                      <p>
+                        <span className="numeral block text-3xl leading-none text-[#F0E6D2]">
+                          {characters(current)}
+                        </span>
+                        <span className="mt-1.5 block text-[13px] text-[#8A8578]">
+                          {t.home.characters}
+                        </span>
+                      </p>
+                      <div aria-hidden className="h-9 w-px bg-[rgba(200,170,110,0.2)]" />
+                      <p>
+                        <span className="numeral block text-3xl leading-none text-[#F0E6D2]">
+                          {places(current)}
+                        </span>
+                        <span className="mt-1.5 block text-[13px] text-[#8A8578]">
+                          {t.home.places}
+                        </span>
+                      </p>
+                    </div>
 
-          {/* Descripción */}
-          <p className="text-[10px] sm:text-sm text-[var(--text-secondary)] line-clamp-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-            {world.description[language]}
-          </p>
-
-          {/* Badge de lugares */}
-          <div className="flex items-center gap-2 pt-1 sm:pt-2">
-            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-[var(--background)] border border-[var(--border)] rounded-full">
-              <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[var(--gold)]" />
-              <span className="text-[10px] sm:text-xs font-semibold text-[var(--text-secondary)]">
-                {Array.isArray(world.places) ? world.places.length : 0}{" "}
-                {language === "en" ? "Places" : "Lugares"}
-              </span>
+                    <Link
+                      href={ROUTES.WORLD_DETAIL(current.identifier)}
+                      className="display mt-9 inline-flex items-center gap-2.5 text-sm tracking-[0.08em] transition-opacity duration-300 hover:opacity-70"
+                      style={{ color: realmInk(current.mainColor) }}
+                    >
+                      <span
+                        aria-hidden
+                        className="h-[6px] w-[6px] rotate-45 border"
+                        style={{ borderColor: current.mainColor }}
+                      />
+                      {t.home.enterRealm} {name(current)}
+                    </Link>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
           </div>
 
-          {/* Línea decorativa */}
-          <div className="pt-2 sm:pt-3">
-            <div className="h-px w-0 group-hover:w-full bg-gradient-to-r from-[var(--gold)] to-transparent transition-all duration-500" />
+          {/* Por dónde vas: una barra fina pegada al borde derecho. */}
+          <div
+            aria-hidden
+            className="absolute bottom-0 right-0 top-0 hidden w-px bg-[rgba(200,170,110,0.12)] lg:block"
+          >
+            <div
+              className="w-px transition-[height] duration-500"
+              style={{
+                height: `${((active + 1) / worlds.length) * 100}%`,
+                background: current.mainColor,
+              }}
+            />
           </div>
         </div>
-
-        {/* Indicador de hover */}
-        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
-          <svg
-            className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--gold)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </div>
-      </Link>
-    </motion.div>
+      </div>
+    </div>
   );
 }

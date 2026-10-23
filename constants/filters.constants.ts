@@ -35,7 +35,8 @@ export const CHARACTER_FILTERS: FilterConfig[] = [
   },
   {
     id: "world.name",
-    type: FilterType.SELECT,
+    // Multiselección: el carril de runas deja marcar varios reinos a la vez.
+    type: FilterType.MULTI_SELECT,
     label: {
       en: "World",
       es: "Mundo",
@@ -137,5 +138,22 @@ export const PLACE_FILTERS: FilterConfig[] = [
       es: "Buscar por nombre...",
       de: "Nach Name suchen...",
     },
+  },
+  {
+    id: "world.name",
+    // Multiselección, igual que en personajes.
+    type: FilterType.MULTI_SELECT,
+    label: {
+      en: "World",
+      es: "Mundo",
+      de: "Welt",
+    },
+    placeholder: {
+      en: "All worlds",
+      es: "Todos los mundos",
+      de: "Alle Welten",
+    },
+    // El reino de cada lugar se deduce de `world.places`; ver places-page-content.
+    dynamicOptions: true,
   },
 ];

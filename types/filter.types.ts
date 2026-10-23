@@ -80,12 +80,25 @@ export interface FilterValues {
 }
 
 /**
+ * Valor de un filtro: texto o lista (multiselección).
+ */
+export type FilterValue = string | string[];
+
+/**
+ * Cómo se fija: con el valor nuevo o con una función que recibe el anterior (como `setState`).
+ * La forma con función es la que hace falta para alternar elementos de una multiselección.
+ */
+export type FilterValueUpdater =
+  | FilterValue
+  | ((previous: FilterValue | undefined) => FilterValue);
+
+/**
  * Resultado del hook de filtros
  */
 export interface UseFiltersResult<T> {
   filteredData: T[];
   filterValues: FilterValues;
-  setFilterValue: (filterId: string, value: string | string[]) => void;
+  setFilterValue: (filterId: string, value: FilterValueUpdater) => void;
   clearFilters: () => void;
   hasActiveFilters: boolean;
   enrichedConfigs: FilterConfig[]; // Configs con opciones dinámicas generadas
