@@ -1,3 +1,4 @@
+import { linkDescription } from "@/lib/services/link.service";
 import { notFound } from "next/navigation";
 import { creatureService } from "@/lib/services/creature.service";
 import { CreatureDetailContent } from "@/components/pages/creature-detail-content";
@@ -42,5 +43,7 @@ export default async function CreatureDetailPage({
     .filter((c) => c.identifier !== creature.identifier)
     .slice(0, 6);
 
-  return <CreatureDetailContent creature={creature} others={others} />;
+  const linked = await linkDescription(creature.description, { kind: "creature", identifier: creature.identifier });
+
+  return <CreatureDetailContent linked={linked} creature={creature} others={others} />;
 }

@@ -6,15 +6,17 @@ import { EntryPlate } from "@/components/cards/entry-plate/entry-plate";
 import { DetailRail, EntryDetail, type DetailStat } from "@/components/ui/entry-detail/entry-detail";
 import { ROUTES } from "@/constants/routes.constants";
 import { useTranslate } from "@/hooks/use-language";
+import type { LinkedDescription } from "@/lib/services/link.service";
 import { useTranslations } from "@/hooks/use-translations";
 import type { Place, PlaceWithWorld } from "@/types/place.types";
 
 interface PlaceDetailContentProps {
+  linked?: LinkedDescription;
   place: PlaceWithWorld;
   neighbours: Place[];
 }
 
-export function PlaceDetailContent({ place, neighbours }: PlaceDetailContentProps) {
+export function PlaceDetailContent({ linked, place, neighbours }: PlaceDetailContentProps) {
   const t = useTranslations();
   const translate = useTranslate();
 
@@ -33,6 +35,7 @@ export function PlaceDetailContent({ place, neighbours }: PlaceDetailContentProp
 
   return (
     <EntryDetail
+      linked={linked}
       name={translate(place.name)}
       sub={world ? translate(world.name) : undefined}
       description={translate(place.description)}
@@ -40,7 +43,11 @@ export function PlaceDetailContent({ place, neighbours }: PlaceDetailContentProp
       tint={world?.mainColor}
       rune={world?.detailedIcon}
       stats={stats}
-      back={{ href: ROUTES.PLACES, label: t.pages.places.title }}
+      back={
+        world
+          ? { href: ROUTES.WORLD_DETAIL(world.identifier), label: translate(world.name) }
+          : { href: ROUTES.WORLDS, label: t.pages.worlds.title }
+      }
       shape="wide"
     >
       {neighbours.length > 0 && (

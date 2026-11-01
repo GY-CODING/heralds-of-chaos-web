@@ -11,21 +11,24 @@
 import { CharacterCard } from "@/components/cards/character-card/character-card";
 import { CodexFilterBar } from "@/components/ui/codex-filter-bar/codex-filter-bar";
 import { Cover, Rule } from "@/components/ui/scene/scene";
-import { CHARACTER_FILTERS } from "@/constants/filters.constants";
+import { CHARACTER_FILTER_PARAMS, CHARACTER_FILTERS, REALMS_WITHOUT_CHARACTERS } from "@/constants/filters.constants";
 import { useFilters } from "@/hooks/use-filters";
 import { useTranslations } from "@/hooks/use-translations";
 import type { CharacterWithWorld } from "@/types/character.types";
+import type { FilterValues } from "@/types/filter.types";
 import type { World } from "@/types/world.types";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface CharactersPageContentProps {
   characters: CharacterWithWorld[];
   worlds: World[];
+  /** Los filtros que traía la URL: `/characters?worlds=vanaheim`. */
+  initialFilters: FilterValues;
 }
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-export function CharactersPageContent({ characters, worlds }: CharactersPageContentProps) {
+export function CharactersPageContent({ characters, worlds, initialFilters }: CharactersPageContentProps) {
   const t = useTranslations();
   const reduce = useReducedMotion();
 
@@ -36,7 +39,7 @@ export function CharactersPageContent({ characters, worlds }: CharactersPageCont
     clearFilters,
     hasActiveFilters,
     enrichedConfigs,
-  } = useFilters(characters, CHARACTER_FILTERS);
+  } = useFilters(characters, CHARACTER_FILTERS, { params: CHARACTER_FILTER_PARAMS, initial: initialFilters });
 
   return (
     <div className="min-h-screen">
@@ -65,8 +68,8 @@ export function CharactersPageContent({ characters, worlds }: CharactersPageCont
             hasActiveFilters={hasActiveFilters}
             resultCount={filteredData.length}
             unit={t.units.characters}
-            worlds={worlds}
-            realmFilterId="world.name"
+            worlds={worlds.filter((w) => !REALMS_WITHOUT_CHARACTERS.includes(w.identifier))}
+            realmFilterId="world.identifier"
           />
 
           {filteredData.length > 0 ? (

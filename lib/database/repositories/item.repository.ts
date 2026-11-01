@@ -1,17 +1,18 @@
 import { Filter } from "mongodb";
 import { BaseRepository } from "./base.repository";
 import { COLLECTIONS } from "@/constants/database.constants";
+import { itemTypeKeysMatching } from "@/constants/races.constants";
 import type { Item, ItemFilters } from "@/types/item.types";
 
 /**
  * Repositorio para la entidad Item
- * Extiende el repositorio base con operaciones específicas de ítems
+ * Extiende el repositorio base con operaciones específicas de objetos
  */
 export class ItemRepository extends BaseRepository<Item> {
   protected collectionName = COLLECTIONS.ITEMS;
 
   /**
-   * Encuentra ítems aplicando filtros
+   * Encuentra objetos aplicando filtros
    */
   async findWithFilters(filters: ItemFilters): Promise<Item[]> {
     try {
@@ -29,12 +30,8 @@ export class ItemRepository extends BaseRepository<Item> {
       }
 
       if (filters.type) {
-        Object.assign(mongoFilter, {
-          $or: [
-            { "type.es": { $regex: filters.type, $options: "i" } },
-            { "type.en": { $regex: filters.type, $options: "i" } },
-          ],
-        });
+        // `type` se guarda como enum (`SWORD`); se acepta clave o etiqueta en cualquier idioma.
+        Object.assign(mongoFilter, { type: { $in: itemTypeKeysMatching(filters.type) } });
       }
 
       return await this.findByFilter(mongoFilter as Filter<Item>);

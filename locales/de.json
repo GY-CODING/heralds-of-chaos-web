@@ -136,12 +136,55 @@
     "relatedItems": "Verwandte Gegenstände",
     "relatedWorlds": "Verwandte Welten",
     "relatedPlaces": "Verwandte Orte",
+    "related": "Verwandt",
     "sealed": "Noch keine Illustration",
     "back": "Zurück",
     "readOn": "Weiterlesen"
   },
+  "codex": {
+    "title": "Kodex",
+    "close": "Zurück zum Regal",
+    "prev": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "contents": "Inhalt",
+    "openEntry": "Ganzen Eintrag lesen",
+    "unwritten": "Diese Seite ist noch leer: Ihre Geschichte wurde noch nicht geschrieben.",
+    "keys": "← → zum Blättern · Esc zum Schließen",
+    "lead": "Drei Bücher für den Anfang: die neun Welten, die Bestien, die sie durchstreifen, und die Reliquien, die sie hinterließen.",
+    "open": "{book} öffnen",
+    "places": "Orte",
+    "noPlaces": "In dieser Welt wurden noch keine Orte verzeichnet.",
+    "seeCharacters": "Figuren ansehen",
+    "enterWorld": "{world} betreten",
+    "endTitle": "Dies ist erst der Anfang",
+    "endBody": "Dieses Buch enthält {shown} von {total}. Der Rest wartet in der vollständigen Sammlung.",
+    "books": {
+      "worlds": {
+        "title": "Atlas",
+        "subtitle": "Die neun Welten Yggdrasils",
+        "unit": "Welten"
+      },
+      "creatures": {
+        "title": "Bestiarium",
+        "subtitle": "Die Bestien, die die Äste durchstreifen",
+        "unit": "Kreaturen",
+        "all": "Alle {total} Kreaturen ansehen"
+      },
+      "items": {
+        "title": "Reliquiar",
+        "subtitle": "Waffen und Reliquien der Macht",
+        "unit": "Objekte",
+        "all": "Alle {total} Objekte ansehen"
+      }
+    }
+  },
+  "worldPlaces": {
+    "title": "Orte",
+    "search": "Ort suchen…",
+    "empty": "Kein Ort entspricht deiner Suche."
+  },
   "footer": {
-    "tagline": "Eine Welt von GYCODING.",
+    "tagline": "Neun Reiche, ein Baum und hinter jedem Namen eine Legende.",
     "codex": "Kodex",
     "realms": "Reiche",
     "rights": "Alle Rechte vorbehalten.",

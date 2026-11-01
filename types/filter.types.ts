@@ -103,3 +103,6 @@ export interface UseFiltersResult<T> {
   hasActiveFilters: boolean;
   enrichedConfigs: FilterConfig[]; // Configs con opciones dinámicas generadas
 }
+
+/** Qué filtros se reflejan en la URL y con qué parámetro. `list`: valores separados por comas. */
+export type FilterParams = Record<string, { param: string; list?: boolean }>;

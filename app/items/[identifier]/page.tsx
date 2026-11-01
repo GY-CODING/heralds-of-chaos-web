@@ -1,3 +1,4 @@
+import { linkDescription } from "@/lib/services/link.service";
 import { notFound } from "next/navigation";
 import { itemService } from "@/lib/services/item.service";
 import { ItemDetailContent } from "@/components/pages/item-detail-content";
@@ -39,5 +40,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
     .filter((i) => i.identifier !== item.identifier)
     .slice(0, 6);
 
-  return <ItemDetailContent item={item} others={others} />;
+  const linked = await linkDescription(item.description, { kind: "item", identifier: item.identifier });
+
+  return <ItemDetailContent linked={linked} item={item} others={others} />;
 }

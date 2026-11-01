@@ -3,7 +3,7 @@ import { itemService } from "@/lib/services/item.service";
 
 /**
  * GET /api/items
- * Obtiene todos los ítems o filtra por parámetros
+ * Obtiene todos los objetos o filtra por parámetros
  */
 export async function GET(request: NextRequest) {
   try {

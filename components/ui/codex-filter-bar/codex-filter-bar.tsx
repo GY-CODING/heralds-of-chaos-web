@@ -155,7 +155,7 @@ export function CodexFilterBar({
             onClick={() => onFilterChange(realmFilterId, [])}
           />
           {worlds?.map((w) => {
-            const value = w.name.en.toLowerCase();
+            const value = w.identifier;
             return (
               <RealmChip
                 key={w.identifier}
@@ -203,11 +203,11 @@ function RealmChip({
       }}
     >
       {rune ? (
-        <RuneSigil src={rune} color={accent} size={24} lit={active} plate />
+        <RuneSigil src={rune} color={accent} size={24} lit={active} plate className="-translate-y-[0.12em]" />
       ) : (
         <span
           aria-hidden
-          className="h-[7px] w-[7px] rotate-45 border"
+          className="h-[7px] w-[7px] -translate-y-[0.12em] rotate-45 border"
           style={{ borderColor: accent, background: active ? accent : "transparent" }}
         />
       )}

@@ -4,12 +4,14 @@
 import type { MultiLanguageText } from "@/types/common.types";
 import type {
   FilterConfig,
+  FilterParams,
   FilterValueUpdater,
   FilterValues,
   SelectFilterConfig,
   UseFiltersResult,
 } from "@/types/filter.types";
-import { useMemo, useState } from "react";
+import { serializeFilterParams } from "@/lib/utils/filter-params";
+import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "./use-language";
 
 /**
@@ -118,14 +120,28 @@ function generateDynamicOptions<T extends Record<string, any>>(
  * Hook genérico para manejar filtros en listas
  * @param data - Datos a filtrar
  * @param filterConfigs - Configuración de filtros
+ * @param url - Si se pasa, los filtros arrancan de la URL (la lee el servidor) y se escriben en ella
  * @returns Datos filtrados y funciones de control
  */
 export function useFilters<T extends Record<string, any>>(
   data: T[],
   filterConfigs: FilterConfig[],
+  url?: { params: FilterParams; initial: FilterValues },
 ): UseFiltersResult<T> {
   const { language } = useLanguage();
-  const [filterValues, setFilterValues] = useState<FilterValues>({});
+  const [filterValues, setFilterValues] = useState<FilterValues>(url?.initial ?? {});
+
+  // `replaceState` y no el router: filtrar no debe pedir la página otra vez al servidor ni llenar
+  // el historial, y al volver de una ficha la URL ya trae los filtros puestos.
+  const params = url?.params;
+  useEffect(() => {
+    if (!params) return;
+    const query = serializeFilterParams(filterValues, params, window.location.search);
+    const next = window.location.pathname + (query ? `?${query}` : "");
+    if (next !== window.location.pathname + window.location.search) {
+      window.history.replaceState(window.history.state, "", next);
+    }
+  }, [filterValues, params]);
 
   /**
    * Enriquece la configuración de filtros con opciones dinámicas

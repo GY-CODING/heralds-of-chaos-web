@@ -9,7 +9,7 @@ interface RouteContext {
 
 /**
  * GET /api/items/[identifier]
- * Obtiene un ítem por su identifier
+ * Obtiene un objeto por su identifier
  */
 export async function GET(request: NextRequest, context: RouteContext) {
   try {

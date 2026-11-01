@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * La ficha abierta del códice: el armazón que comparten personaje, criatura, ítem, lugar y reino.
+ * La ficha abierta del códice: el armazón que comparten personaje, criatura, objeto, lugar y reino.
  *
  * Antes era media pantalla de imagen vertical y, al lado, un párrafo suelto con tres cuartos de
  * la página en blanco. Ahora:
@@ -13,6 +13,9 @@
  */
 
 import { Rule, SealedPlate, realmInk, rgbOf, VOID } from "@/components/ui/scene/scene";
+import { LinkedText } from "@/components/ui/linked-text/linked-text";
+import { useLanguage } from "@/hooks/use-language";
+import type { LinkedDescription } from "@/lib/services/link.service";
 import { useTranslations } from "@/hooks/use-translations";
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
@@ -36,15 +39,25 @@ interface EntryDetailProps {
   /** El título, el tipo o la raza: la línea que va bajo el nombre. */
   sub?: string;
   description: string;
+  /** La misma descripción con las menciones `[Nombre]` ya resueltas como enlaces. */
+  linked?: LinkedDescription;
   image?: string;
   tint?: string;
   rune?: string;
   stats?: DetailStat[];
   back: { href: string; label: string };
-  /** Proporción de la lámina: los ítems son cuadrados y los lugares apaisados. */
+  /** Proporción de la lámina: los objetos son cuadrados y los lugares apaisados. */
   shape?: "portrait" | "square" | "wide";
   children?: ReactNode;
 }
+
+const KIND_UNIT = {
+  character: "characters",
+  creature: "creatures",
+  item: "items",
+  place: "places",
+  world: "worlds",
+} as const;
 
 const ASPECT = {
   portrait: "aspect-[2/3]",
@@ -56,6 +69,7 @@ export function EntryDetail({
   name,
   sub,
   description,
+  linked,
   image,
   tint = "#C8AA6E",
   rune,
@@ -65,6 +79,7 @@ export function EntryDetail({
   children,
 }: EntryDetailProps) {
   const t = useTranslations();
+  const { language } = useLanguage();
   const reduce = useReducedMotion();
   const [artFailed, setArtFailed] = useState(false);
   const sealed = !image || image.includes("none.webp") || artFailed;
@@ -117,12 +132,14 @@ export function EntryDetail({
           >
             <span
               aria-hidden
-              className="h-[6px] w-[6px] rotate-45 border border-current transition-transform duration-300 ease-pop group-hover:-translate-x-1"
+              className="h-[6px] w-[6px] -translate-y-[0.12em] rotate-45 border border-current transition-transform duration-300 ease-pop group-hover:-translate-x-1"
             />
             {back.label}
           </Link>
 
-          <div className="mt-7 flex items-center gap-4 md:mt-9 md:gap-5">
+          {/* La runa va dentro del h1 para heredar su tamaño: las mayúsculas de Penumbra tienen su
+              centro 0,116em por encima del de la línea, así que la runa sube esa misma medida. */}
+          <h1 className="engraved mt-7 flex items-center gap-4 text-4xl leading-[0.95] sm:text-6xl md:mt-9 md:gap-5 md:text-8xl">
             {rune && (
               <Image
                 src={rune}
@@ -130,11 +147,11 @@ export function EntryDetail({
                 width={56}
                 height={56}
                 aria-hidden
-                className="h-10 w-10 shrink-0 object-contain md:h-14 md:w-14"
+                className="h-10 w-10 shrink-0 -translate-y-[0.116em] object-contain md:h-14 md:w-14"
               />
             )}
-            <h1 className="engraved text-4xl leading-[0.95] sm:text-6xl md:text-8xl">{name}</h1>
-          </div>
+            <span>{name}</span>
+          </h1>
 
           {sub && (
             <p className="mt-4 text-lg md:mt-5 md:text-2xl" style={{ color: realmInk(tint) }}>
@@ -145,29 +162,30 @@ export function EntryDetail({
           {stats.length > 0 && (
             <dl className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5 border-t border-[rgba(200,170,110,0.18)] pt-6 md:mt-10">
               {stats.map((stat) => (
-                <div key={stat.label} className="flex items-center gap-3">
-                  {stat.rune && (
-                    <Image
-                      src={stat.rune}
-                      alt=""
-                      width={28}
-                      height={28}
-                      aria-hidden
-                      className="h-7 w-7 object-contain"
-                    />
-                  )}
-                  <div>
-                    <dt className="text-[12px] tracking-[0.08em] text-[#6A6A6A]">{stat.label}</dt>
-                    <dd className="display mt-1 text-[15px]" style={{ color: stat.color ? realmInk(stat.color) : "#F0E6D2" }}>
-                      {stat.href ? (
-                        <Link href={stat.href} className="transition-opacity duration-300 hover:opacity-70">
-                          {stat.value}
-                        </Link>
-                      ) : (
-                        stat.value
-                      )}
-                    </dd>
-                  </div>
+                <div key={stat.label}>
+                  <dt className="text-[12px] tracking-[0.08em] text-[#6A6A6A]">{stat.label}</dt>
+                  <dd
+                    className="display mt-1 flex items-center gap-2 text-[15px]"
+                    style={{ color: stat.color ? realmInk(stat.color) : "#F0E6D2" }}
+                  >
+                    {stat.rune && (
+                      <Image
+                        src={stat.rune}
+                        alt=""
+                        width={28}
+                        height={28}
+                        aria-hidden
+                        className="h-6 w-6 shrink-0 -translate-y-[0.116em] object-contain"
+                      />
+                    )}
+                    {stat.href ? (
+                      <Link href={stat.href} className="transition-opacity duration-300 hover:opacity-70">
+                        {stat.value}
+                      </Link>
+                    ) : (
+                      stat.value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -211,12 +229,35 @@ export function EntryDetail({
             </h2>
             <Rule className="mx-0 mt-5 max-w-[180px]" />
             <p className="dropcap mt-7 max-w-[66ch] text-[17px] leading-[1.75] text-[var(--text-secondary)] md:text-[19px]">
-              {description}
+              {linked && linked.related.length > 0 ? <LinkedText linked={linked} /> : description}
             </p>
           </div>
         </div>
 
         {children && <div className="mx-auto mt-20 max-w-[1240px]">{children}</div>}
+
+        {linked && linked.related.length > 0 && (
+          <section className="mx-auto mt-16 max-w-[1240px]" aria-labelledby="related-title">
+            <h2 id="related-title" className="text-xl text-[var(--text-primary)] md:text-2xl">
+              {t.detail.related}
+            </h2>
+            <ul className="mt-6 flex list-none flex-wrap gap-2.5 p-0">
+              {linked.related.map((r) => (
+                <li key={`${r.kind}:${r.identifier}`}>
+                  <Link
+                    href={r.href}
+                    className="inline-flex min-h-11 items-center gap-2.5 rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] px-4 text-[15px] text-[var(--text-primary)] transition-colors duration-300 hover:border-[var(--gold)] focus-visible:border-[var(--gold)]"
+                  >
+                    {r.name[language] || r.name.en}
+                    <span className="text-[12px] text-[var(--text-tertiary)]">
+                      {t.units[KIND_UNIT[r.kind]].one}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </article>
   );

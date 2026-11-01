@@ -21,7 +21,6 @@ const COLLECTIONS = [
   { href: ROUTES.CREATURES, key: "creatures" as const },
   { href: ROUTES.ITEMS, key: "items" as const },
   { href: ROUTES.WORLDS, key: "worlds" as const },
-  { href: ROUTES.PLACES, key: "places" as const },
 ];
 
 export function Footer({ worlds }: { worlds: World[] }) {
@@ -90,7 +89,7 @@ export function Footer({ worlds }: { worlds: World[] }) {
                   href={ROUTES.WORLD_DETAIL(w.identifier)}
                   className="group flex items-center gap-2 py-1 text-[15px] text-[#A09B8C] transition-colors duration-300 hover:text-[#F0E6D2]"
                 >
-                  <RuneSigil src={w.detailedIcon} color={w.mainColor} size={18} />
+                  <RuneSigil src={w.detailedIcon} color={w.mainColor} size={18} className="-translate-y-[0.12em]" />
                   {w.name[language] ?? w.name.en}
                 </Link>
               </li>

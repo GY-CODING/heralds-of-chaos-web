@@ -9,17 +9,20 @@ import { EntryPlate } from "@/components/cards/entry-plate/entry-plate";
 import { DetailRail, EntryDetail, type DetailStat } from "@/components/ui/entry-detail/entry-detail";
 import { ROUTES } from "@/constants/routes.constants";
 import { useTranslate } from "@/hooks/use-language";
+import type { LinkedDescription } from "@/lib/services/link.service";
 import { useTranslations } from "@/hooks/use-translations";
 import type { Character } from "@/types/character.types";
 import type { World } from "@/types/world.types";
 
 interface CharacterDetailContentProps {
+  linked?: LinkedDescription;
   character: Character;
   world: World | null;
   companions: Character[];
 }
 
 export function CharacterDetailContent({
+  linked,
   character,
   world,
   companions,
@@ -42,6 +45,7 @@ export function CharacterDetailContent({
 
   return (
     <EntryDetail
+      linked={linked}
       name={translate(character.name)}
       sub={translate(character.title)}
       description={translate(character.description)}

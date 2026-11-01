@@ -142,12 +142,55 @@
     "relatedItems": "Related Items",
     "relatedWorlds": "Related Worlds",
     "relatedPlaces": "Related Places",
+    "related": "Related",
     "sealed": "No illustration yet",
     "back": "Back",
     "readOn": "Read on"
   },
+  "codex": {
+    "title": "Codex",
+    "close": "Back to the shelf",
+    "prev": "Previous page",
+    "next": "Next page",
+    "contents": "Contents",
+    "openEntry": "Read the full entry",
+    "unwritten": "This page is still blank: its story has yet to be written.",
+    "keys": "← → to turn the page · Esc to close",
+    "lead": "Three books to begin with: the nine worlds, the beasts that roam them and the relics they left behind.",
+    "open": "Open {book}",
+    "places": "Places",
+    "noPlaces": "No places have been written in this world yet.",
+    "seeCharacters": "See characters",
+    "enterWorld": "Enter {world}",
+    "endTitle": "This is only the beginning",
+    "endBody": "This book holds {shown} of {total}. The rest wait in the full collection.",
+    "books": {
+      "worlds": {
+        "title": "Atlas",
+        "subtitle": "The nine worlds of Yggdrasil",
+        "unit": "worlds"
+      },
+      "creatures": {
+        "title": "Bestiary",
+        "subtitle": "The beasts that roam the branches",
+        "unit": "creatures",
+        "all": "See all {total} creatures"
+      },
+      "items": {
+        "title": "Reliquary",
+        "subtitle": "Weapons and relics of power",
+        "unit": "items",
+        "all": "See all {total} items"
+      }
+    }
+  },
+  "worldPlaces": {
+    "title": "Places",
+    "search": "Search for a place…",
+    "empty": "No place matches your search."
+  },
   "footer": {
-    "tagline": "A world built by GYCODING.",
+    "tagline": "Nine realms, one tree, and a legend behind every name.",
     "codex": "Codex",
     "realms": "Realms",
     "rights": "All rights reserved.",

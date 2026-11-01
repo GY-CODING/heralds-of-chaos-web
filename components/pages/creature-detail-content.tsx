@@ -6,15 +6,17 @@ import { EntryPlate } from "@/components/cards/entry-plate/entry-plate";
 import { DetailRail, EntryDetail, type DetailStat } from "@/components/ui/entry-detail/entry-detail";
 import { ROUTES } from "@/constants/routes.constants";
 import { useTranslate } from "@/hooks/use-language";
+import type { LinkedDescription } from "@/lib/services/link.service";
 import { useTranslations } from "@/hooks/use-translations";
 import type { Creature } from "@/types/creature.types";
 
 interface CreatureDetailContentProps {
+  linked?: LinkedDescription;
   creature: Creature;
   others: Creature[];
 }
 
-export function CreatureDetailContent({ creature, others }: CreatureDetailContentProps) {
+export function CreatureDetailContent({ linked, creature, others }: CreatureDetailContentProps) {
   const t = useTranslations();
   const translate = useTranslate();
 
@@ -23,6 +25,7 @@ export function CreatureDetailContent({ creature, others }: CreatureDetailConten
 
   return (
     <EntryDetail
+      linked={linked}
       name={translate(creature.name)}
       sub={race}
       description={translate(creature.description)}

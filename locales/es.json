@@ -142,12 +142,55 @@
     "relatedItems": "Objetos Relacionados",
     "relatedWorlds": "Mundos Relacionados",
     "relatedPlaces": "Lugares Relacionados",
+    "related": "Relacionados",
     "sealed": "Todavía sin ilustración",
     "back": "Volver",
     "readOn": "Sigue leyendo"
   },
+  "codex": {
+    "title": "Códice",
+    "close": "Volver a la estantería",
+    "prev": "Página anterior",
+    "next": "Página siguiente",
+    "contents": "Índice",
+    "openEntry": "Ver la ficha completa",
+    "unwritten": "Esta página aún está en blanco: su historia todavía no se ha escrito.",
+    "keys": "← → para pasar página · Esc para cerrar",
+    "lead": "Tres libros para empezar: los nueve mundos, las bestias que los rondan y las reliquias que dejaron.",
+    "open": "Abrir {book}",
+    "places": "Lugares",
+    "noPlaces": "Aún no hay lugares escritos en este mundo.",
+    "seeCharacters": "Ver personajes",
+    "enterWorld": "Entrar en {world}",
+    "endTitle": "Esto es solo el principio",
+    "endBody": "Este libro guarda {shown} de {total}. El resto espera en la colección completa.",
+    "books": {
+      "worlds": {
+        "title": "Atlas",
+        "subtitle": "Los nueve mundos de Yggdrasil",
+        "unit": "mundos"
+      },
+      "creatures": {
+        "title": "Bestiario",
+        "subtitle": "Las bestias que rondan las ramas",
+        "unit": "criaturas",
+        "all": "Ver las {total} criaturas"
+      },
+      "items": {
+        "title": "Relicario",
+        "subtitle": "Armas y reliquias de poder",
+        "unit": "objetos",
+        "all": "Ver los {total} objetos"
+      }
+    }
+  },
+  "worldPlaces": {
+    "title": "Lugares",
+    "search": "Buscar un lugar…",
+    "empty": "Ningún lugar coincide con tu búsqueda."
+  },
   "footer": {
-    "tagline": "Un mundo construido por GYCODING.",
+    "tagline": "Nueve reinos, un solo árbol y cada nombre una leyenda.",
     "codex": "Códice",
     "realms": "Reinos",
     "rights": "Todos los derechos reservados.",
@@ -163,8 +206,8 @@
       "many": "criaturas"
     },
     "items": {
-      "one": "ítem",
-      "many": "ítems"
+      "one": "objeto",
+      "many": "objetos"
     },
     "places": {
       "one": "lugar",

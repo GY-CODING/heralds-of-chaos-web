@@ -1,3 +1,4 @@
+import { linkDescription } from "@/lib/services/link.service";
 import { notFound } from "next/navigation";
 import { placeService } from "@/lib/services/place.service";
 import { worldService } from "@/lib/services/world.service";
@@ -46,5 +47,7 @@ export default async function PlaceDetailPage({
     .slice(0, 6);
   const neighbours = await placeService.getByIds(neighbourIds);
 
-  return <PlaceDetailContent place={place} neighbours={neighbours} />;
+  const linked = await linkDescription(place.description, { kind: "place", identifier: place.identifier });
+
+  return <PlaceDetailContent linked={linked} place={place} neighbours={neighbours} />;
 }

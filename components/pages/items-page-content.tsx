@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Los ítems. El arte viene cuadrado (1024×1024), así que la lámina es cuadrada.
+ * Los objetos. El arte viene cuadrado (1024×1024), así que la lámina es cuadrada.
  */
 
 import { EntryPlate } from "@/components/cards/entry-plate/entry-plate";

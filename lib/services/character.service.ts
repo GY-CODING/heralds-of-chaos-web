@@ -1,5 +1,12 @@
 import { characterRepository } from "../database/repositories/character.repository";
+import { COLLECTIONS } from "@/constants/database.constants";
+import { normalizeRace } from "@/constants/races.constants";
 import type { Character, CharacterFilters } from "@/types/character.types";
+import { sortByOrder } from "@/lib/utils/sort-by-order";
+import { getOrder } from "../database/repositories/order.repository";
+
+/** La raza llega como enum crudo (`LIGHT_ELF`): aquí se convierte en texto por idioma. */
+const withRace = (c: Character): Character => ({ ...c, race: normalizeRace(c.race) });
 
 /**
  * Servicio de Characters
@@ -11,7 +18,11 @@ export class CharacterService {
    */
   async getAllCharacters(): Promise<Character[]> {
     try {
-      return await characterRepository.findAll();
+      const [all, order] = await Promise.all([
+        characterRepository.findAll(),
+        getOrder(COLLECTIONS.CHARACTERS),
+      ]);
+      return sortByOrder(all, order).map(withRace);
     } catch (error) {
       console.error("[CharacterService.getAllCharacters] Error:", error);
       throw new Error("Failed to fetch characters");
@@ -29,7 +40,8 @@ export class CharacterService {
         throw new Error("Identifier is required");
       }
 
-      return await characterRepository.findByIdentifier(identifier);
+      const character = await characterRepository.findByIdentifier(identifier);
+      return character ? withRace(character) : null;
     } catch (error) {
       console.error(
         `[CharacterService.getCharacterByIdentifier] Error:`,
@@ -48,7 +60,7 @@ export class CharacterService {
         throw new Error("World ID is required");
       }
 
-      return await characterRepository.findByWorld(worldId);
+      return (await characterRepository.findByWorld(worldId)).map(withRace);
     } catch (error) {
       console.error(`[CharacterService.getCharactersByWorld] Error:`, error);
       throw new Error("Failed to fetch characters by world");
@@ -60,7 +72,7 @@ export class CharacterService {
    */
   async searchCharacters(filters: CharacterFilters): Promise<Character[]> {
     try {
-      return await characterRepository.findWithFilters(filters);
+      return (await characterRepository.findWithFilters(filters)).map(withRace);
     } catch (error) {
       console.error("[CharacterService.searchCharacters] Error:", error);
       throw new Error("Failed to search characters");
@@ -83,7 +95,7 @@ export class CharacterService {
    */
   async getIllustrated(limit: number): Promise<Character[]> {
     try {
-      return await characterRepository.findIllustrated(limit);
+      return (await characterRepository.findIllustrated(limit)).map(withRace);
     } catch (error) {
       console.error("[CharacterService.getIllustrated] Error:", error);
       return [];
@@ -112,7 +124,9 @@ export class CharacterService {
   ): Promise<Character[]> {
     try {
       if (!worldId) return [];
-      return await characterRepository.findCompanions(worldId, excludeIdentifier, limit);
+      return (await characterRepository.findCompanions(worldId, excludeIdentifier, limit)).map(
+        withRace,
+      );
     } catch (error) {
       console.error("[CharacterService.getCompanions] Error:", error);
       return [];

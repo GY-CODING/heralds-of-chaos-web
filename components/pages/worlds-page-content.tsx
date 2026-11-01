@@ -13,7 +13,7 @@
 import { ROUTES } from "@/constants/routes.constants";
 import { useLanguage } from "@/hooks/use-language";
 import { useTranslations } from "@/hooks/use-translations";
-import { Cover, realmInk, rgbOf, Rule, RuneSigil, VOID } from "@/components/ui/scene/scene";
+import { realmInk, rgbOf, RuneSigil, VOID } from "@/components/ui/scene/scene";
 import type { World } from "@/types/world.types";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
@@ -69,23 +69,11 @@ export function WorldsPageContent({ worlds, census }: WorldsPageContentProps) {
 
   return (
     <div className="min-h-screen" style={{ background: VOID }}>
-      <Cover tint={current.mainColor}>
-        <motion.div
-          className="text-center"
-          initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <h1 className="foil text-5xl leading-none md:text-8xl">{t.pages.worlds.title}</h1>
-          <Rule className="mt-7 max-w-[220px]" />
-          <p className="mx-auto mt-7 max-w-[52ch] text-base leading-relaxed text-[#A09B8C] md:text-lg">
-            {t.pages.worlds.subtitle}
-          </p>
-        </motion.div>
-      </Cover>
+      {/* Sin cabecera de portada: se entra directo al pase de reinos. El h1 queda para lectores de pantalla. */}
+      <h1 className="sr-only">{t.pages.worlds.title}</h1>
 
       {/* Móvil: los reinos, uno detrás de otro. */}
-      <ol className="list-none px-5 py-14 md:hidden">
+      <ol className="list-none px-5 pb-14 pt-[calc(var(--header-h)+1.5rem)] md:hidden">
         {worlds.map((w, i) => (
           <motion.li
             key={w.identifier}
@@ -193,7 +181,7 @@ export function WorldsPageContent({ worlds, census }: WorldsPageContentProps) {
                 {worlds.map((w, i) => (
                   <li
                     key={w.identifier}
-                    className="flex items-center gap-3 py-1 transition-opacity duration-500"
+                    className="flex items-center gap-3 py-1 text-sm transition-opacity duration-500"
                     style={{ opacity: i === active ? 1 : 0.52 }}
                   >
                     <RuneSigil
@@ -201,6 +189,7 @@ export function WorldsPageContent({ worlds, census }: WorldsPageContentProps) {
                       color={w.mainColor}
                       size={i === active ? 30 : 22}
                       lit={i === active}
+                      className="-translate-y-[0.116em]"
                     />
                     <span
                       className="display text-sm tracking-[0.04em] transition-colors duration-500"
@@ -269,7 +258,7 @@ export function WorldsPageContent({ worlds, census }: WorldsPageContentProps) {
                     >
                       <span
                         aria-hidden
-                        className="h-[6px] w-[6px] rotate-45 border"
+                        className="h-[6px] w-[6px] -translate-y-[0.116em] rotate-45 border"
                         style={{ borderColor: current.mainColor }}
                       />
                       {t.home.enterRealm} {name(current)}

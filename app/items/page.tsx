@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Página que muestra todos los ítems de la mitología nórdica
+ * Página que muestra todos los objetos de la mitología nórdica
  */
 export default async function ItemsPage() {
   const items = await itemService.getAllItems();

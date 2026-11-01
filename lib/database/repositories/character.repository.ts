@@ -3,6 +3,8 @@ import { Filter } from "mongodb";
 import { BaseRepository } from "./base.repository";
 import { COLLECTIONS } from "@/constants/database.constants";
 import type { Character, CharacterFilters } from "@/types/character.types";
+import { raceKeysMatching } from "@/constants/races.constants";
+import { localizeImageUrls } from "@/lib/utils/image-host";
 
 /**
  * Repositorio para la entidad Character
@@ -52,12 +54,8 @@ export class CharacterRepository extends BaseRepository<Character> {
       }
 
       if (filters.race) {
-        Object.assign(mongoFilter, {
-          $or: [
-            { "race.es": { $regex: filters.race, $options: "i" } },
-            { "race.en": { $regex: filters.race, $options: "i" } },
-          ],
-        });
+        // `race` se guarda como enum (`LIGHT_ELF`); se acepta clave o etiqueta en cualquier idioma.
+        Object.assign(mongoFilter, { race: { $in: raceKeysMatching(filters.race) } });
       }
 
       return await this.findByFilter(mongoFilter as Filter<Character>);
@@ -91,7 +89,7 @@ export class CharacterRepository extends BaseRepository<Character> {
           return art(a) - art(b);
         })
         .slice(0, limit)
-        .map((doc) => ({
+        .map((doc) => localizeImageUrls({
           ...doc,
           _id: doc._id.toString(),
           world: worldIdOf((doc as any).world) ?? "",

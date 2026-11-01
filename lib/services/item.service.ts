@@ -1,5 +1,12 @@
 import { itemRepository } from "../database/repositories/item.repository";
+import { COLLECTIONS } from "@/constants/database.constants";
+import { normalizeItemType } from "@/constants/races.constants";
 import type { Item, ItemFilters } from "@/types/item.types";
+import { sortByOrder } from "@/lib/utils/sort-by-order";
+import { getOrder } from "../database/repositories/order.repository";
+
+/** La clase llega como enum crudo (`SWORD`): aquí se convierte en texto por idioma. */
+const withType = (i: Item): Item => ({ ...i, type: normalizeItemType(i.type) });
 
 /**
  * Servicio de Items
@@ -7,11 +14,12 @@ import type { Item, ItemFilters } from "@/types/item.types";
  */
 export class ItemService {
   /**
-   * Obtiene todos los ítems
+   * Obtiene todos los objetos
    */
   async getAllItems(): Promise<Item[]> {
     try {
-      return await itemRepository.findAll();
+      const [all, order] = await Promise.all([itemRepository.findAll(), getOrder(COLLECTIONS.ITEMS)]);
+      return sortByOrder(all, order).map(withType);
     } catch (error) {
       console.error("[ItemService.getAllItems] Error:", error);
       throw new Error("Failed to fetch items");
@@ -19,7 +27,7 @@ export class ItemService {
   }
 
   /**
-   * Obtiene un ítem por su identifier
+   * Obtiene un objeto por su identifier
    */
   async getItemByIdentifier(identifier: string): Promise<Item | null> {
     try {
@@ -27,7 +35,8 @@ export class ItemService {
         throw new Error("Identifier is required");
       }
 
-      return await itemRepository.findByIdentifier(identifier);
+      const item = await itemRepository.findByIdentifier(identifier);
+      return item ? withType(item) : null;
     } catch (error) {
       console.error(`[ItemService.getItemByIdentifier] Error:`, error);
       throw new Error("Failed to fetch item");
@@ -35,11 +44,11 @@ export class ItemService {
   }
 
   /**
-   * Busca ítems con filtros
+   * Busca objetos con filtros
    */
   async searchItems(filters: ItemFilters): Promise<Item[]> {
     try {
-      return await itemRepository.findWithFilters(filters);
+      return (await itemRepository.findWithFilters(filters)).map(withType);
     } catch (error) {
       console.error("[ItemService.searchItems] Error:", error);
       throw new Error("Failed to search items");
@@ -47,7 +56,7 @@ export class ItemService {
   }
 
   /**
-   * Cuenta el total de ítems
+   * Cuenta el total de objetos
    */
   async countItems(): Promise<number> {
     try {
@@ -62,7 +71,7 @@ export class ItemService {
    */
   async getIllustrated(limit: number): Promise<Item[]> {
     try {
-      return await itemRepository.findIllustrated(limit);
+      return (await itemRepository.findIllustrated(limit)).map(withType);
     } catch (error) {
       console.error("[ItemService.getIllustrated] Error:", error);
       return [];

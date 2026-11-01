@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * La lámina del códice: la forma que comparten criaturas, ítems y lugares.
+ * La lámina del códice: la forma que comparten criaturas, objetos y lugares.
  *
  * Es la misma pieza que la ficha de personaje — arte, velo, nombre dentro y una tira grabada
  * debajo — para que todas las colecciones se lean como partes del mismo tomo. Lo único que
- * cambia es la proporción del arte: los ítems son cuadrados, los lugares apaisados y las
+ * cambia es la proporción del arte: los objetos son cuadrados, los lugares apaisados y las
  * criaturas verticales, que es como están hechas las ilustraciones.
  *
  * Cuando no hay ilustración (43 de 49 criaturas, 43 de 108 lugares) entra la entrada sellada.

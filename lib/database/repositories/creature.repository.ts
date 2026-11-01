@@ -1,6 +1,7 @@
 import { Filter } from "mongodb";
 import { BaseRepository } from "./base.repository";
 import { COLLECTIONS } from "@/constants/database.constants";
+import { creatureRaceKeysMatching } from "@/constants/races.constants";
 import type { Creature, CreatureFilters } from "@/types/creature.types";
 
 /**
@@ -29,12 +30,8 @@ export class CreatureRepository extends BaseRepository<Creature> {
       }
 
       if (filters.race) {
-        Object.assign(mongoFilter, {
-          $or: [
-            { "race.es": { $regex: filters.race, $options: "i" } },
-            { "race.en": { $regex: filters.race, $options: "i" } },
-          ],
-        });
+        // `race` se guarda como enum (`HORSE`); se acepta clave o etiqueta en cualquier idioma.
+        Object.assign(mongoFilter, { race: { $in: creatureRaceKeysMatching(filters.race) } });
       }
 
       return await this.findByFilter(mongoFilter as Filter<Creature>);

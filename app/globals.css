@@ -363,3 +363,73 @@
     }
   }
 }
+
+/* ── El códice: cuero y pergamino (solo fondos estáticos; lo que se anima es transform/opacity) ── */
+@layer components {
+  .codex-stage {
+    /* La página mide lo que deja la pantalla: alto menos cabecera y mandos, y nunca más ancha que
+       el 44% del viewport (dos páginas + los marcapáginas caben). Proporción 0,74. */
+    --pw: min(calc((100svh - var(--header-h, 64px) - 170px) * 0.74), 44vw, 540px);
+    --ph: calc(var(--pw) / 0.74);
+  }
+  @media (max-width: 767px) {
+    .codex-stage {
+      --pw: min(88vw, 380px, calc((100svh - var(--header-h, 64px) - 190px) * 0.62));
+      --ph: calc(var(--pw) / 0.62);
+    }
+  }
+
+  .leather {
+    position: relative;
+    background:
+      radial-gradient(120% 90% at 28% 12%, #1d1914 0%, #0d0b09 62%),
+      #0b0a08;
+  }
+  .leather::after,
+  .paper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .leather::after { opacity: 0.32; mix-blend-mode: overlay; }
+  .paper::after { opacity: 0.22; mix-blend-mode: multiply; }
+
+  .paper {
+    --ink: #1c1510;
+    --ink-2: #5b4a33;
+    --ink-gold: #7a5a1e;
+    position: relative;
+    color: var(--ink);
+    background:
+      radial-gradient(60% 45% at 18% 12%, rgba(120, 90, 40, 0.1), transparent 70%),
+      radial-gradient(50% 40% at 85% 88%, rgba(120, 90, 40, 0.12), transparent 70%),
+      linear-gradient(#ebdfc6, #e1d3b2);
+  }
+  /* La sombra del lomo: cada página se oscurece hacia donde se une con la otra. */
+  .paper-left::before,
+  .paper-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .paper-left::before {
+    background: linear-gradient(to left, rgba(54, 36, 12, 0.5) 0%, rgba(54, 36, 12, 0.16) 7%, transparent 18%),
+      linear-gradient(to right, rgba(54, 36, 12, 0.14), transparent 4%);
+  }
+  .paper-right::before {
+    background: linear-gradient(to right, rgba(54, 36, 12, 0.5) 0%, rgba(54, 36, 12, 0.16) 7%, transparent 18%),
+      linear-gradient(to left, rgba(54, 36, 12, 0.14), transparent 4%);
+  }
+  .paper .dropcap::first-letter {
+    color: var(--ink-gold);
+    font-size: 3.3em;
+  }
+  .page-scroll {
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent);
+  }
+}

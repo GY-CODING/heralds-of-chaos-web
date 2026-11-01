@@ -1,3 +1,5 @@
+import { CHARACTER_FILTER_PARAMS } from "@/constants/filters.constants";
+import { parseFilterParams } from "@/lib/utils/filter-params";
 import { characterService } from "@/lib/services/character.service";
 import { worldService } from "@/lib/services/world.service";
 import { CharactersPageContent } from "@/components/pages/characters-page-content";
@@ -80,7 +82,12 @@ function mapCharactersWithWorlds(
 /**
  * Página que muestra todos los personajes de la mitología nórdica
  */
-export default async function CharactersPage() {
+export default async function CharactersPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const initialFilters = parseFilterParams(await searchParams, CHARACTER_FILTER_PARAMS);
   const [characters, worlds] = await Promise.all([
     characterService.getAllCharacters(),
     worldService.getAllWorlds(),
@@ -89,5 +96,13 @@ export default async function CharactersPage() {
   // Mapear characters con sus worlds
   const charactersWithWorlds = mapCharactersWithWorlds(characters, worlds);
 
-  return <CharactersPageContent characters={charactersWithWorlds} worlds={worlds} />;
+  // La `key` reinicia los filtros si se llega por un enlace con otra URL estando ya en la página.
+  return (
+    <CharactersPageContent
+      key={JSON.stringify(initialFilters)}
+      characters={charactersWithWorlds}
+      worlds={worlds}
+      initialFilters={initialFilters}
+    />
+  );
 }

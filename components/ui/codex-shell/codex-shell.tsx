@@ -27,7 +27,7 @@ interface CodexShellProps<T> {
   filters: FilterConfig[];
   /** Clases de la rejilla: cada colección tiene su proporción de lámina. */
   grid: string;
-  /** Con qué se cuenta en la barra: "85 ítems", no "85 entradas". */
+  /** Con qué se cuenta en la barra: "85 objetos", no "85 entradas". */
   unit: { one: string; many: string };
   keyOf: (item: T) => string;
   renderItem: (item: T) => ReactNode;

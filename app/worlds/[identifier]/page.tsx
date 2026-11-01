@@ -1,3 +1,4 @@
+import { linkDescription } from "@/lib/services/link.service";
 import { notFound } from "next/navigation";
 import { worldService } from "@/lib/services/world.service";
 import { characterService } from "@/lib/services/character.service";
@@ -44,12 +45,15 @@ export default async function WorldDetailPage({
     (id): id is string => typeof id === "string",
   );
   const [places, census] = await Promise.all([
-    placeService.getByIds(placeIds.slice(0, 6)),
+    placeService.getByIds(placeIds),
     characterService.getWorldCensus(),
   ]);
 
+  const linked = await linkDescription(world.description, { kind: "world", identifier: world.identifier });
+
   return (
     <WorldDetailContent
+      linked={linked}
       world={world}
       places={places}
       names={census[world._id] ?? 0}

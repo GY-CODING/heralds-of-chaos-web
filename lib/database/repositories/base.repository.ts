@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BaseEntity } from "@/types/common.types";
 import { Collection, Filter, FindOptions, ObjectId } from "mongodb";
+import { localizeImageUrls } from "@/lib/utils/image-host";
 import { getDatabase } from "../mongodb";
 
 /**
@@ -61,7 +62,8 @@ function serializeDocument<T>(doc: any): T {
     }
   });
 
-  return serialized as T;
+  // Con ENV=LOCAL las imágenes salen del servidor directo (ver lib/utils/image-host.ts).
+  return localizeImageUrls(serialized) as T;
 }
 
 /**

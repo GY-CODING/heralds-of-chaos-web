@@ -28,7 +28,6 @@ const NAV = [
   { href: ROUTES.CREATURES, key: "creatures" as const },
   { href: ROUTES.ITEMS, key: "items" as const },
   { href: ROUTES.WORLDS, key: "worlds" as const },
-  { href: ROUTES.PLACES, key: "places" as const },
 ];
 
 export function Header() {
@@ -120,7 +119,7 @@ export function Header() {
                   >
                     <span
                       aria-hidden
-                      className="h-[5px] w-[5px] rotate-45 border transition-[opacity,transform] duration-300 ease-pop"
+                      className="h-[5px] w-[5px] -translate-y-[0.116em] rotate-45 border transition-[opacity,transform] duration-300 ease-pop"
                       style={{
                         borderColor: "var(--gold)",
                         background: active ? "var(--gold)" : "transparent",
@@ -184,7 +183,7 @@ export function Header() {
                     >
                       <span
                         aria-hidden
-                        className="h-[7px] w-[7px] rotate-45 border border-[var(--gold)]"
+                        className="h-[7px] w-[7px] -translate-y-[0.116em] rotate-45 border border-[var(--gold)]"
                         style={{ background: active ? "var(--gold)" : "transparent" }}
                       />
                       {translate(SECTION_TITLES[item.key])}

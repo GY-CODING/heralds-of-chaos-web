@@ -1,3 +1,4 @@
+import { linkDescription } from "@/lib/services/link.service";
 import { notFound } from "next/navigation";
 import { characterService } from "@/lib/services/character.service";
 import { worldService } from "@/lib/services/world.service";
@@ -50,8 +51,11 @@ export default async function CharacterDetailPage({
   ]);
   const world = worlds.find((w) => w._id === worldId) ?? null;
 
+  const linked = await linkDescription(character.description, { kind: "character", identifier: character.identifier });
+
   return (
     <CharacterDetailContent
+      linked={linked}
       character={character}
       world={world}
       companions={companions}

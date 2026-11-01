@@ -28,7 +28,7 @@ export const SECTION_TITLES = {
     en: "Creatures",
   },
   items: {
-    es: "Ítems",
+    es: "Objetos",
     en: "Items",
   },
   worlds: {

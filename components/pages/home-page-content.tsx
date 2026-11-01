@@ -16,20 +16,23 @@
  *   2. Yggdrasil  — los diez mundos colgando del árbol: la escena se queda fija y el reino
  *                   cambia al bajar, con la runa encendida en su rama. La pantalla con el arte
  *                   de cada reino vive ahora en `/worlds`.
- *   3. El universo — las cuatro colecciones (los mundos ya están arriba), con su número real de
- *                   entradas y una tira de arte de verdad.
+ *   3. El universo — la estantería del códice: el atlas de los nueve mundos, el bestiario y el
+ *                   relicario, tres libros que se abren ahí mismo.
  *   4. El cierre  — el Bifröst: un filete con los diez colores de los reinos.
  *
  * Rendimiento: solo se animan transform y opacity; nada de blur animado; la ceniza baja a 6
  * motas en punteros gruesos y `prefers-reduced-motion` apaga sello, aurora, ceniza y entradas.
  */
 
+import { CodexLibrary } from "@/components/ui/codex-book/codex-library";
+import { NOT_A_REALM } from "@/constants/filters.constants";
 import { ROUTES } from "@/constants/routes.constants";
 import { useLanguage } from "@/hooks/use-language";
 import { useTranslations } from "@/hooks/use-translations";
+import type { CodexBookData } from "@/types/codex.types";
 import type { World } from "@/types/world.types";
+import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import {
@@ -46,26 +49,12 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-export interface CodexSample {
-  identifier: string;
-  image: string;
-}
-
-export interface Counts {
-  characters: number;
-  creatures: number;
-  items: number;
-  worlds: number;
-  places: number;
-}
-
 export interface HomePageContentProps {
   worlds: World[];
-  counts: Counts;
   /** Personajes por id de mundo. Sale de la colección, no está escrito a mano. */
   census: Record<string, number>;
-  /** Hasta cuatro piezas con arte de cada colección, para las tiras del universo. */
-  strips: Record<keyof Counts, CodexSample[]>;
+  /** Los tres libros de la estantería: atlas, bestiario y relicario. */
+  books: CodexBookData[];
 }
 
 /* ── 1. La puerta ─────────────────────────────────────────────────────────── */
@@ -132,8 +121,8 @@ function Gate() {
           className="mt-10 flex flex-wrap items-center justify-center gap-x-9 gap-y-4"
           {...rise(0.46)}
         >
-          <Link href={ROUTES.CHARACTERS} className="btn-foil-soft display">
-            {t.hero.cta}
+          <Link href="#codex" className="btn-foil-soft display">
+            {t.hero.enter}
           </Link>
           <Link
             href={ROUTES.WORLDS}
@@ -142,32 +131,35 @@ function Gate() {
             {t.hero.secondary}
             <span
               aria-hidden
-              className="h-[6px] w-[6px] rotate-45 border border-current transition-transform duration-300 ease-pop group-hover:translate-x-1"
+              className="h-[6px] w-[6px] -translate-y-[0.12em] rotate-45 border border-current transition-transform duration-300 ease-pop group-hover:translate-x-1"
             />
           </Link>
         </motion.div>
       </div>
 
-      <motion.p
-        className="absolute bottom-5 left-0 right-0 z-10 text-[11px] tracking-[0.2em] text-[#6A6A6A]"
+      {/* Indicador de scroll: un trazo fino con una luz que cae. Solo transform/opacity. */}
+      <motion.div
+        className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-[#8A8578]"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.9 }}
       >
-        {t.home.scroll}
-      </motion.p>
+        <span className="sr-only">{t.home.scroll}</span>
+        <span aria-hidden className="relative block h-9 w-px overflow-hidden bg-[rgba(200,170,110,0.25)]">
+          <motion.span
+            className="absolute inset-x-0 top-0 block h-4 bg-[var(--gold)]"
+            animate={reduce ? undefined : { y: [-16, 36], opacity: [0, 1, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </span>
+        <ChevronDown aria-hidden className="h-4 w-4" />
+      </motion.div>
     </section>
   );
 }
 
 /* ── 2. Yggdrasil: los diez mundos colgando del árbol ─────────────────────── */
 
-/**
- * Ginnungagap está en la base de datos y tiene su runa, su color y sus personajes, pero no es
- * uno de los mundos que cuelgan del árbol: es el vacío anterior a todo. Fuera del árbol y fuera
- * de la cuenta del titular; en `/worlds` y en los filtros sigue estando.
- */
-const NOT_A_REALM = ["ginnungagap"];
 
 function Yggdrasil({
   worlds,
@@ -357,7 +349,7 @@ function Yggdrasil({
                   >
                     <span
                       aria-hidden
-                      className="h-[6px] w-[6px] rotate-45 border"
+                      className="h-[6px] w-[6px] -translate-y-[0.116em] rotate-45 border"
                       style={{ borderColor: current.mainColor }}
                     />
                     {t.home.enterRealm} {name(current)}
@@ -458,101 +450,30 @@ function Tree({ realms, active }: { realms: World[]; active: number }) {
   );
 }
 
-/* ── 3. El universo: las cuatro colecciones ───────────────────────────────── */
+/* ── 3. El universo: la estantería del códice, tres libros que se abren aquí mismo ─────────────── */
 
-function Collections({
-  counts,
-  strips,
-}: {
-  counts: Counts;
-  strips: HomePageContentProps["strips"];
-}) {
+function Library({ books }: { books: CodexBookData[] }) {
   const t = useTranslations();
-  const reduce = useReducedMotion();
-
-  // Los mundos no están: se recorren enteros justo arriba, en el árbol.
-  const rows = [
-    { key: "characters" as const, href: ROUTES.CHARACTERS, count: counts.characters, copy: t.sections.characters, unit: t.units.characters },
-    { key: "creatures" as const, href: ROUTES.CREATURES, count: counts.creatures, copy: t.sections.creatures, unit: t.units.creatures },
-    { key: "items" as const, href: ROUTES.ITEMS, count: counts.items, copy: t.sections.items, unit: t.units.items },
-    { key: "places" as const, href: ROUTES.PLACES, count: counts.places, copy: t.sections.places, unit: t.units.places },
-  ];
 
   return (
     <section
+      id="codex"
       aria-labelledby="collections-title"
-      className="relative z-10 bg-[var(--background)] px-5 py-20 md:px-8 md:py-28"
+      className="relative z-10 scroll-mt-[var(--header-h)] overflow-x-clip px-4 py-20 md:px-8 md:py-28"
+      style={{ background: VOID, color: "#F0E6D2" }}
     >
-      <div className="mx-auto max-w-[1240px]">
+      <NightSky embers={6} />
+      <div className="relative z-10 mx-auto max-w-[1240px]">
         <div className="text-center">
           <h2 id="collections-title" className="text-4xl leading-none md:text-6xl">
-            <span className="foil-adaptive">{t.home.collectionsTitle}</span>
+            <span className="foil">{t.home.collectionsTitle}</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-[46ch] text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">
-            {t.sections.subtitle}
-          </p>
+          <p className="mx-auto mt-5 max-w-[52ch] text-base leading-relaxed text-[#A09B8C] md:text-lg">{t.codex.lead}</p>
           <Rule className="mt-8 max-w-[200px]" />
         </div>
-
-        <ol className="mt-14 md:mt-20">
-          {rows.map((row, i) => (
-            <motion.li
-              key={row.key}
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.55, delay: i * 0.05, ease: EASE }}
-              className="border-t border-[var(--border-strong)] last:border-b"
-            >
-              <Link
-                href={row.href}
-                className="group grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-4 py-7 transition-colors duration-500 hover:bg-[var(--surface-hover)] md:grid-cols-[132px_minmax(0,1fr)_auto] md:gap-x-8 md:py-9"
-              >
-                <span className="block">
-                  <span className="numeral foil-adaptive block text-4xl leading-none md:text-[56px]">
-                    {row.count}
-                  </span>
-                  <span className="mt-2 block text-[12px] text-[var(--text-tertiary)]">
-                    {row.count === 1 ? row.unit.one : row.unit.many}
-                  </span>
-                </span>
-
-                <div className="min-w-0">
-                  <h3 className="text-2xl leading-none text-[var(--text-primary)] transition-transform duration-500 ease-pop group-hover:translate-x-1.5 md:text-[32px]">
-                    {row.copy.title}
-                  </h3>
-                  <p className="mt-2.5 max-w-[52ch] text-[15px] leading-relaxed text-[var(--text-secondary)] md:text-base">
-                    {row.copy.description}
-                  </p>
-                </div>
-
-                {/* La tira: arte de verdad de esa colección. Al pasar por encima,
-                    cada pieza se desplaza un poco, una detrás de otra. */}
-                <div
-                  aria-hidden
-                  className="col-span-2 flex items-center gap-2 overflow-hidden md:col-span-1 md:w-[316px] md:justify-end"
-                >
-                  {(strips[row.key] ?? []).map((s, j) => (
-                    <span
-                      key={s.identifier}
-                      className="relative block h-16 w-12 shrink-0 overflow-hidden rounded-[6px] border border-[var(--border)] transition-transform duration-500 ease-pop group-hover:-translate-y-1.5 md:h-[88px] md:w-16"
-                      style={{ transitionDelay: `${j * 45}ms` }}
-                    >
-                      <Image
-                        src={s.image}
-                        alt=""
-                        fill
-                        sizes="64px"
-                        className="object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-100"
-                        loading="lazy"
-                      />
-                    </span>
-                  ))}
-                </div>
-              </Link>
-            </motion.li>
-          ))}
-        </ol>
+        <div className="mt-12 md:mt-14">
+          <CodexLibrary books={books} />
+        </div>
       </div>
     </section>
   );
@@ -625,12 +546,12 @@ function Closing({ worlds }: { worlds: World[] }) {
 
 /* ── La página ────────────────────────────────────────────────────────────── */
 
-export function HomePageContent({ worlds, counts, census, strips }: HomePageContentProps) {
+export function HomePageContent({ worlds, census, books }: HomePageContentProps) {
   return (
     <div className="min-h-screen">
       <Gate />
       <Yggdrasil worlds={worlds} census={census} />
-      <Collections counts={counts} strips={strips} />
+      <Library books={books} />
       <Closing worlds={worlds} />
     </div>
   );

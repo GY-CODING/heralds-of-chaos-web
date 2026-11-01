@@ -7,6 +7,7 @@ export const COLLECTIONS = {
   ITEMS: "Item",
   WORLDS: "World",
   PLACES: "Place",
+  ORDER: "_Order",
 } as const;
 
 /**
